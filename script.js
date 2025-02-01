@@ -1,69 +1,32 @@
-document.addEventListener('DOMContentLoaded', () => {
-    // Hamburger Menu Toggle
-    const hamburgerMenu = document.querySelector('.hamburger-menu');
-    const navbar = document.querySelector('.navbar');
+const messages = [
+    "Are you sure?",
+    "Really sure??",
+    "It's gonna be so fun!",
+    "Please 🥺",
+    "Are you positive?",
+    "Love please...",
+    "Just think about it!",
+    "If you say no, I will be really sad...",
+    "I will be very sad...",
+    "I will be very very very sad...",
+    "Ok fine, I will stop asking...",
+    "Just kidding, say yes please! ❤️",
+    "Oh well, if you clicked 'no' that many times i think it means 'no'",
+    "Just kidding, say yes plese :D ",
+    "I love you so much maha, please say yes 😭"
+];
 
-    if (hamburgerMenu) {
-        hamburgerMenu.addEventListener('click', () => {
-            navbar.classList.toggle('show');
-            // Animate hamburger to X
-            hamburgerMenu.classList.toggle('active');
-        });
-    }
+let messageIndex = 0;
 
-    // Handling Modal for Image Gallery
-    const articles = document.querySelectorAll('.falling-text-container');
-    const modal = document.getElementById('imageModal');
-    const modalImg = document.getElementById('modalImage');
-    const captionText = document.getElementById('caption');
+function handleNoClick() {
+    const noButton = document.querySelector('.no-button');
+    const yesButton = document.querySelector('.yes-button');
+    noButton.textContent = messages[messageIndex];
+    messageIndex = (messageIndex + 1) % messages.length;
+    const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
+    yesButton.style.fontSize = `${currentSize * 1.1}px`;
+}
 
-    articles.forEach((article, index) => {
-        const headline = article.querySelector('.headline');
-        const text = article.querySelector('.falling-text:not(.headline)');
-        const images = article.querySelectorAll('.gallery-image');
-        const imageGallery = article.querySelector('.image-gallery');
-
-        const animateText = (element, delay) => {
-            setTimeout(() => {
-                element.style.opacity = 1;
-                element.style.top = '0';
-            }, delay);
-        };
-
-        // Animate text and images
-        setTimeout(() => {
-            animateText(headline, index * 500); // stagger animations for multiple articles
-        }, 500);
-
-        setTimeout(() => {
-            animateText(text, index * 500);
-        }, 500);
-
-        setTimeout(() => {
-            imageGallery.style.opacity = 1;
-        }, 500 + index * 500);
-
-        // Setup image modal
-        images.forEach(image => {
-            image.addEventListener('click', function() {
-                modal.style.display = 'block';
-                modalImg.src = this.src;
-                captionText.innerHTML = this.alt;
-            });
-        });
-    });
-
-    // Close Modal
-    const closeModal = document.querySelector('.close');
-    if (closeModal) {
-        closeModal.addEventListener('click', () => {
-            modal.style.display = 'none';
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        });
-    }
-});
+function handleYesClick() {
+    window.location.href = "yes_page.html";
+}
