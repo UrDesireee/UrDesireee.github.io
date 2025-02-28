@@ -5,98 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jakub Kucharczyk - Portfolio</title>
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script defer src="script.js"></script>
 </head>
 <body>
-    <div class="cursor"></div>
-    
+    <!-- Navigation -->
     <header>
+        <h1>Jakub Kucharczyk</h1>
         <nav>
             <ul>
-                <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
-                <li><a href="#projects">Projects</a></li>
+                <li><a href="#portfolio">Portfolio</a></li>
+                <li><a href="#experience">Experience</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
     </header>
 
-    <main>
-        <section id="home">
-            <div class="container">
-                <h1 data-value="JAKUB KUCHARCZYK">JAKUB KUCHARCZYK</h1>
-                <p class="subtitle">Freelance Writer | AI Specialist | Cybersecurity Expert</p>
-                <a href="#contact" class="cta-button">Get in Touch</a>
-            </div>
-        </section>
+    <!-- Hero Section -->
+    <section id="hero">
+        <h2 id="typing-text"></h2>
+        <p>Freelancer | Copywriter | AI & Cybersecurity Enthusiast</p>
+        <div class="socials">
+            <a href="https://github.com/UrDesireee" target="_blank"><i class="fab fa-github"></i></a>
+        </div>
+    </section>
 
-        <section id="about">
-            <div class="container">
-                <h2>About Me</h2>
-                <p>With over 20 years of experience in the tech industry, I've honed my skills as a freelance writer, AI specialist, and cybersecurity expert. My journey began on May 22, 1986, and since then, I've been at the forefront of technological advancements, helping businesses navigate the complex world of IT and computer science.</p>
-            </div>
-        </section>
+    <!-- About Section -->
+    <section id="about">
+        <h2>About Me</h2>
+        <div class="about-content">
+            <img src="profile.jpg" alt="Jakub Kucharczyk">
+            <p>Hi, I'm Jakub, a passionate freelancer with expertise in copywriting, AI, IT, and cybersecurity. I enjoy blending creativity with technology to craft meaningful digital experiences.</p>
+        </div>
+    </section>
 
-        <section id="skills">
-            <div class="container">
-                <h2>Skills</h2>
-                <div class="skill-grid">
-                    <div class="skill-item" style="--i:1;"><i class="fas fa-pen-fancy"></i> Advanced Writing</div>
-                    <div class="skill-item" style="--i:2;"><i class="fas fa-robot"></i> AI Development</div>
-                    <div class="skill-item" style="--i:3;"><i class="fas fa-shield-alt"></i> Cybersecurity</div>
-                    <div class="skill-item" style="--i:4;"><i class="fas fa-code"></i> Full-Stack Development</div>
-                    <div class="skill-item" style="--i:5;"><i class="fas fa-project-diagram"></i> Project Management</div>
-                    <div class="skill-item" style="--i:6;"><i class="fas fa-database"></i> Big Data Analytics</div>
-                </div>
-            </div>
-        </section>
+    <!-- Skills Section -->
+    <section id="skills">
+        <h2>Skills</h2>
+        <div class="skills-grid">
+            <div class="skill"><i class="fab fa-html5"></i> HTML</div>
+            <div class="skill"><i class="fab fa-css3-alt"></i> CSS</div>
+            <div class="skill"><i class="fab fa-js"></i> JavaScript</div>
+            <div class="skill"><i class="fab fa-linux"></i> Linux</div>
+            <div class="skill"><i class="fas fa-lock"></i> Cybersecurity</div>
+            <div class="skill"><i class="fas fa-brain"></i> AI</div>
+        </div>
+    </section>
 
-        <section id="projects">
-            <div class="container">
-                <h2>Featured Projects</h2>
-                <div class="project-grid">
-                    <div class="project" style="--i:1;">
-                        <h3>AI-Driven Content Creation Platform</h3>
-                        <p>Developed an AI-powered platform that generates high-quality, SEO-optimized content for businesses across various industries.</p>
-                    </div>
-                    <div class="project" style="--i:2;">
-                        <h3>Cybersecurity Framework for FinTech</h3>
-                        <p>Designed and implemented a robust cybersecurity framework for a leading FinTech company, ensuring compliance with international standards.</p>
-                    </div>
-                    <div class="project" style="--i:3;">
-                        <h3>Machine Learning for Predictive Maintenance</h3>
-                        <p>Created a machine learning model that predicts equipment failures in manufacturing plants, reducing downtime by 35%.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
+    <!-- Portfolio Section -->
+    <section id="portfolio">
+        <h2>Portfolio</h2>
+        <div class="portfolio-grid">
+            <div class="portfolio-item">This Website</div>
+        </div>
+    </section>
 
-        <section id="contact">
-            <div class="container">
-                <h2>Get in Touch</h2>
-                <form id="contact-form">
-                    <input type="text" placeholder="Name" required>
-                    <input type="email" placeholder="Email" required>
-                    <textarea placeholder="Message" required></textarea>
-                    <button type="submit">Send Message</button>
-                </form>
-            </div>
-        </section>
-    </main>
+    <!-- Experience & Certifications -->
+    <section id="experience">
+        <h2>Experience & Certifications</h2>
+        <ul>
+            <li>Freelancer Writer at Outlier</li>
+            <li>Cisco Linux Essentials Certification</li>
+        </ul>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact">
+        <h2>Contact Me</h2>
+        <form>
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
 
     <footer>
-        <div class="container">
-            <p>&copy; 2025 Jakub Kucharczyk. All rights reserved.</p>
-            <div class="social-links">
-                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
-                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
-            </div>
-        </div>
+        <p>© 2024 Jakub Kucharczyk</p>
     </footer>
-
-    <script src="script.js"></script>
 </body>
 </html>
