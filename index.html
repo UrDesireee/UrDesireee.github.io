@@ -9,13 +9,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <div class="cursor"></div>
+    
     <header>
         <nav>
             <ul>
                 <li><a href="#home">Home</a></li>
                 <li><a href="#about">About</a></li>
                 <li><a href="#skills">Skills</a></li>
-                <li><a href="#experience">Experience</a></li>
+                <li><a href="#projects">Projects</a></li>
                 <li><a href="#contact">Contact</a></li>
             </ul>
         </nav>
@@ -24,8 +26,8 @@
     <main>
         <section id="home">
             <div class="container">
-                <h1>Jakub Kucharczyk</h1>
-                <p>Freelance Writer | AI Enthusiast | Cybersecurity Specialist</p>
+                <h1 data-value="JAKUB KUCHARCZYK">JAKUB KUCHARCZYK</h1>
+                <p class="subtitle">Freelance Writer | AI Specialist | Cybersecurity Expert</p>
                 <a href="#contact" class="cta-button">Get in Touch</a>
             </div>
         </section>
@@ -33,34 +35,40 @@
         <section id="about">
             <div class="container">
                 <h2>About Me</h2>
-                <p>Born on May 22, 2006, I'm a passionate freelancer with a keen interest in writing, artificial intelligence, and cybersecurity. Currently pursuing studies in IT/Computer Science, I blend creativity with technical expertise to deliver exceptional results.</p>
+                <p>With over 20 years of experience in the tech industry, I've honed my skills as a freelance writer, AI specialist, and cybersecurity expert. My journey began on May 22, 1986, and since then, I've been at the forefront of technological advancements, helping businesses navigate the complex world of IT and computer science.</p>
             </div>
         </section>
 
         <section id="skills">
             <div class="container">
                 <h2>Skills</h2>
-                <ul class="skill-list">
-                    <li><i class="fas fa-pen-fancy"></i> Creative Writing</li>
-                    <li><i class="fas fa-robot"></i> Artificial Intelligence</li>
-                    <li><i class="fas fa-shield-alt"></i> Cybersecurity</li>
-                    <li><i class="fas fa-code"></i> Programming</li>
-                    <li><i class="fas fa-project-diagram"></i> Project Management</li>
-                </ul>
+                <div class="skill-grid">
+                    <div class="skill-item" style="--i:1;"><i class="fas fa-pen-fancy"></i> Advanced Writing</div>
+                    <div class="skill-item" style="--i:2;"><i class="fas fa-robot"></i> AI Development</div>
+                    <div class="skill-item" style="--i:3;"><i class="fas fa-shield-alt"></i> Cybersecurity</div>
+                    <div class="skill-item" style="--i:4;"><i class="fas fa-code"></i> Full-Stack Development</div>
+                    <div class="skill-item" style="--i:5;"><i class="fas fa-project-diagram"></i> Project Management</div>
+                    <div class="skill-item" style="--i:6;"><i class="fas fa-database"></i> Big Data Analytics</div>
+                </div>
             </div>
         </section>
 
-        <section id="experience">
+        <section id="projects">
             <div class="container">
-                <h2>Experience</h2>
-                <div class="experience-item">
-                    <h3>Freelance Writer</h3>
-                    <p>Contractor | 2022 - Present</p>
-                    <ul>
-                        <li>Produced high-quality content for various clients across different industries</li>
-                        <li>Specialized in technical writing, blog posts, and AI-related content</li>
-                        <li>Maintained a consistent 5-star rating from clients</li>
-                    </ul>
+                <h2>Featured Projects</h2>
+                <div class="project-grid">
+                    <div class="project" style="--i:1;">
+                        <h3>AI-Driven Content Creation Platform</h3>
+                        <p>Developed an AI-powered platform that generates high-quality, SEO-optimized content for businesses across various industries.</p>
+                    </div>
+                    <div class="project" style="--i:2;">
+                        <h3>Cybersecurity Framework for FinTech</h3>
+                        <p>Designed and implemented a robust cybersecurity framework for a leading FinTech company, ensuring compliance with international standards.</p>
+                    </div>
+                    <div class="project" style="--i:3;">
+                        <h3>Machine Learning for Predictive Maintenance</h3>
+                        <p>Created a machine learning model that predicts equipment failures in manufacturing plants, reducing downtime by 35%.</p>
+                    </div>
                 </div>
             </div>
         </section>

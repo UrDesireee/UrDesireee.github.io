@@ -1,4 +1,33 @@
 document.addEventListener('DOMContentLoaded', () => {
+    // Animated text reveal
+    const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    let interval = null;
+
+    document.querySelector("h1").onmouseover = event => {  
+        let iteration = 0;
+        
+        clearInterval(interval);
+        
+        interval = setInterval(() => {
+            event.target.innerText = event.target.innerText
+                .split("")
+                .map((letter, index) => {
+                    if(index < iteration) {
+                        return event.target.dataset.value[index];
+                    }
+                
+                    return letters[Math.floor(Math.random() * 26)]
+                })
+                .join("");
+            
+            if(iteration >= event.target.dataset.value.length){ 
+                clearInterval(interval);
+            }
+            
+            iteration += 1 / 3;
+        }, 30);
+    }
+
     // Smooth scrolling for navigation links
     document.querySelectorAll('a[href^="#"]').forEach(anchor => {
         anchor.addEventListener('click', function (e) {
@@ -9,11 +38,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Parallax effect for background
+    // Parallax effect for sections
     window.addEventListener('scroll', () => {
         const scrolled = window.pageYOffset;
-        const parallax = document.querySelector('#home');
-        parallax.style.backgroundPositionY = -(scrolled * 0.5) + 'px';
+        document.querySelectorAll('section').forEach((section, index) => {
+            section.style.transform = `translateY(${scrolled * 0.1 * (index + 1)}px)`;
+        });
     });
 
     // Form submission handling
@@ -25,20 +55,33 @@ document.addEventListener('DOMContentLoaded', () => {
         form.reset();
     });
 
-    // Animate skill items on scroll
-    const skillItems = document.querySelectorAll('.skill-list li');
+    // Custom cursor effect
+    const cursor = document.querySelector('.cursor');
+    const links = document.querySelectorAll('a');
+
+    document.addEventListener('mousemove', (e) => {
+        cursor.setAttribute("style", "top: "+(e.pageY - 10)+"px; left: "+(e.pageX - 10)+"px;")
+    })
+
+    links.forEach(link => {
+        link.addEventListener('mouseover', () => {
+            cursor.classList.add("expand");
+        })
+        link.addEventListener('mouseleave', () => {
+            cursor.classList.remove("expand");
+        })
+    })
+
+    // Intersection Observer for fade-in effect
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
-                entry.target.style.opacity = 1;
-                entry.target.style.transform = 'translateY(0)';
+                entry.target.classList.add('fade-in');
             }
         });
-    }, { threshold: 0.5 });
+    }, { threshold: 0.1 });
 
-    skillItems.forEach(item => {
-        item.style.opacity = 0;
-        item.style.transform = 'translateY(20px)';
-        observer.observe(item);
+    document.querySelectorAll('section').forEach(section => {
+        observer.observe(section);
     });
 });
