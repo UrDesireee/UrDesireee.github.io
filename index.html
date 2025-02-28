@@ -3,20 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Will You Be My Valentine?</title>
+    <title>Jakub Kucharczyk - Portfolio</title>
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="container">
-        <h1>Maha, will you be my Valentine?</h1>
-        <div class="buttons">
-            <button class="yes-button" onclick="handleYesClick()">Yes</button>
-            <button class="no-button" onclick="handleNoClick()">No</button>
+    <header>
+        <nav>
+            <ul>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#about">About</a></li>
+                <li><a href="#skills">Skills</a></li>
+                <li><a href="#experience">Experience</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home">
+            <div class="container">
+                <h1>Jakub Kucharczyk</h1>
+                <p>Freelance Writer | AI Enthusiast | Cybersecurity Specialist</p>
+                <a href="#contact" class="cta-button">Get in Touch</a>
+            </div>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <h2>About Me</h2>
+                <p>Born on May 22, 2006, I'm a passionate freelancer with a keen interest in writing, artificial intelligence, and cybersecurity. Currently pursuing studies in IT/Computer Science, I blend creativity with technical expertise to deliver exceptional results.</p>
+            </div>
+        </section>
+
+        <section id="skills">
+            <div class="container">
+                <h2>Skills</h2>
+                <ul class="skill-list">
+                    <li><i class="fas fa-pen-fancy"></i> Creative Writing</li>
+                    <li><i class="fas fa-robot"></i> Artificial Intelligence</li>
+                    <li><i class="fas fa-shield-alt"></i> Cybersecurity</li>
+                    <li><i class="fas fa-code"></i> Programming</li>
+                    <li><i class="fas fa-project-diagram"></i> Project Management</li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="experience">
+            <div class="container">
+                <h2>Experience</h2>
+                <div class="experience-item">
+                    <h3>Freelance Writer</h3>
+                    <p>Contractor | 2022 - Present</p>
+                    <ul>
+                        <li>Produced high-quality content for various clients across different industries</li>
+                        <li>Specialized in technical writing, blog posts, and AI-related content</li>
+                        <li>Maintained a consistent 5-star rating from clients</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2>Get in Touch</h2>
+                <form id="contact-form">
+                    <input type="text" placeholder="Name" required>
+                    <input type="email" placeholder="Email" required>
+                    <textarea placeholder="Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 Jakub Kucharczyk. All rights reserved.</p>
+            <div class="social-links">
+                <a href="#" target="_blank"><i class="fab fa-linkedin"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="#" target="_blank"><i class="fab fa-twitter"></i></a>
+            </div>
         </div>
-        <div class="gif_container">
-            <img src="don’t-make-me-beg.gif" alt="Cute GIF">
-        </div>
-    </div>
+    </footer>
+
     <script src="script.js"></script>
 </body>
 </html>
