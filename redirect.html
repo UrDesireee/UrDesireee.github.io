@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting...</title>
+    <script>
+        // Extract the 'code' parameter from the URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const authCode = urlParams.get('code');
+
+        if (authCode) {
+            document.body.innerHTML = `<h2>Authorization Code:</h2><p>${authCode}</p><p>Copy this code and use it to generate an access token.</p>`;
+        } else {
+            document.body.innerHTML = "<h2>No Authorization Code Found</h2><p>Please try logging in again.</p>";
+        }
+    </script>
+</head>
+<body>
+</body>
+</html>
