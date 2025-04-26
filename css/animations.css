@@ -18,6 +18,27 @@
     }
 }
 
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes wiggle {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+    25% {
+        transform: rotate(5deg);
+    }
+    75% {
+        transform: rotate(-5deg);
+    }
+}
+
 .fade-in {
     animation: fadeIn 0.6s ease-out;
 }
@@ -26,9 +47,40 @@
     animation: slideIn 0.5s ease-out;
 }
 
-.product-card {
-    animation: fadeIn 0.6s ease-out;
+.bunny-emoji {
+    display: inline-block;
+    animation: bounce 2s infinite;
 }
+
+.nav-brand:hover .bunny-emoji {
+    animation: wiggle 1s infinite;
+}
+
+.hero h1,
+.hero p,
+.hero .browse-btn {
+    animation: fadeIn 1s ease-out forwards;
+}
+
+.hero p {
+    animation-delay: 0.3s;
+}
+
+.hero .browse-btn {
+    animation-delay: 0.6s;
+}
+
+.product-card {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+}
+
+.product-card:nth-child(1) { animation-delay: 0.1s; }
+.product-card:nth-child(2) { animation-delay: 0.2s; }
+.product-card:nth-child(3) { animation-delay: 0.3s; }
+.product-card:nth-child(4) { animation-delay: 0.4s; }
+.product-card:nth-child(5) { animation-delay: 0.5s; }
+.product-card:nth-child(6) { animation-delay: 0.6s; }
 
 .modal-content {
     animation: fadeIn 0.3s ease-out;
@@ -49,4 +101,22 @@
     100% {
         transform: rotate(360deg);
     }
+}
+
+/* Smooth transitions for interactive elements */
+.nav-links a,
+.browse-btn,
+.product-card,
+.contact-form button,
+.subscribe-btn {
+    transition: all 0.3s ease;
+}
+
+/* Hover effects */
+.nav-links a:hover,
+.browse-btn:hover,
+.contact-form button:hover,
+.subscribe-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }

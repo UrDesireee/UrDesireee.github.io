@@ -1,27 +1,39 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const loginBtn = document.getElementById('loginBtn');
-    const loginModal = document.getElementById('loginModal');
-    const closeBtn = document.querySelector('.close');
-    const loginForm = document.getElementById('loginForm');
-    const adminPanel = document.getElementById('adminPanel');
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
-    // Modal controls
-    loginBtn.addEventListener('click', () => {
-        loginModal.style.display = 'block';
-    });
+const supabaseUrl = 'YOUR_SUPABASE_URL'
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
+const supabase = createClient(supabaseUrl, supabaseKey)
 
-    closeBtn.addEventListener('click', () => {
-        loginModal.style.display = 'none';
-    });
+class AuthManager {
+    constructor() {
+        this.loginBtn = document.getElementById('loginBtn');
+        this.loginModal = document.getElementById('loginModal');
+        this.loginForm = document.getElementById('loginForm');
+        this.adminPanel = document.getElementById('adminPanel');
+        this.closeBtn = document.querySelector('.close');
+        
+        this.setupEventListeners();
+        this.checkSession();
+    }
 
-    window.addEventListener('click', (e) => {
-        if (e.target === loginModal) {
-            loginModal.style.display = 'none';
-        }
-    });
+    setupEventListeners() {
+        this.loginBtn.addEventListener('click', () => this.toggleModal());
+        this.closeBtn.addEventListener('click', () => this.toggleModal());
+        this.loginForm.addEventListener('submit', (e) => this.handleLogin(e));
+        
+        window.addEventListener('click', (e) => {
+            if (e.target === this.loginModal) {
+                this.toggleModal();
+            }
+        });
+    }
 
-    // Handle login
-    loginForm.addEventListener('submit', async (e) => {
+    toggleModal() {
+        this.loginModal.style.display = 
+            this.loginModal.style.display === 'block' ? 'none' : 'block';
+    }
+
+    async handleLogin(e) {
         e.preventDefault();
         const email = document.getElementById('email').value;
         const password = document.getElementById('password').value;
@@ -34,39 +46,49 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (error) throw error;
 
-            loginModal.style.display = 'none';
-            loginBtn.textContent = 'Logout';
-            adminPanel.classList.remove('hidden');
-            showNotification('Logged in successfully!', 'success');
+            this.toggleModal();
+            this.showAdminPanel();
+            this.loginBtn.textContent = 'Logout';
+            this.loginBtn.onclick = () => this.handleLogout();
         } catch (error) {
-            showNotification(error.message, 'error');
+            alert('Login failed: ' + error.message);
         }
-    });
+    }
 
-    // Check if user is already logged in
-    checkUser().then(({ data: { user } }) => {
-        if (user) {
-            loginBtn.textContent = 'Logout';
-            adminPanel.classList.remove('hidden');
+    async handleLogout() {
+        try {
+            const { error } = await supabase.auth.signOut();
+            if (error) throw error;
+
+            this.hideAdminPanel();
+            this.loginBtn.textContent = 'Admin Login';
+            this.loginBtn.onclick = () => this.toggleModal();
+        } catch (error) {
+            alert('Logout failed: ' + error.message);
         }
-    });
+    }
 
-    // Handle logout
-    loginBtn.addEventListener('click', async (e) => {
-        if (loginBtn.textContent === 'Logout') {
-            e.preventDefault();
-            try {
-                const { error } = await supabase.auth.signOut();
-                if (error) throw error;
-
-                loginBtn.textContent = 'Login';
-                adminPanel.classList.add('hidden');
-                showNotification('Logged out successfully!', 'success');
-            } catch (error) {
-                showNotification(error.message, 'error');
-            }
+    async checkSession() {
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) {
+            this.showAdminPanel();
+            this.loginBtn.textContent = 'Logout';
+            this.loginBtn.onclick = () => this.handleLogout();
         }
-    });
+    }
+
+    showAdminPanel() {
+        this.adminPanel.classList.remove('hidden');
+    }
+
+    hideAdminPanel() {
+        this.adminPanel.classList.add('hidden');
+    }
+}
+
+// Initialize auth management when DOM is loaded
+document.addEventListener('DOMContentLoaded', () => {
+    new AuthManager();
 });
 
 // Notification helper

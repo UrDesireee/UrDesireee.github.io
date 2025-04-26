@@ -1,3 +1,9 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
+const supabaseUrl = 'YOUR_SUPABASE_URL'
+const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
+const supabase = createClient(supabaseUrl, supabaseKey)
+
 // Products management
 class ProductManager {
     constructor() {
@@ -36,6 +42,7 @@ class ProductManager {
             price: parseFloat(document.getElementById('productPrice').value),
             image_url: document.getElementById('productImage').value,
             product_link: document.getElementById('productLink').value,
+            created_at: new Date().toISOString()
         };
 
         try {

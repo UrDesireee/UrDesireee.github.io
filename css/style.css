@@ -1,8 +1,9 @@
 :root {
-    --primary-color: #ff69b4;
-    --secondary-color: #f8f9fa;
-    --text-color: #333;
-    --shadow: 0 2px 10px rgba(0,0,0,0.1);
+    --primary-pink: #FFD1DC;
+    --dark-pink: #FFB6C1;
+    --text-color: #4A4A4A;
+    --white: #FFFFFF;
+    --shadow: rgba(0, 0, 0, 0.1);
 }
 
 * {
@@ -13,15 +14,14 @@
 }
 
 body {
-    background-color: var(--secondary-color);
+    background-color: var(--white);
     color: var(--text-color);
     line-height: 1.6;
 }
 
 .navbar {
-    background: white;
+    background-color: var(--white);
     padding: 1rem 5%;
-    box-shadow: var(--shadow);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -29,59 +29,105 @@ body {
     width: 100%;
     top: 0;
     z-index: 1000;
+    box-shadow: 0 2px 10px var(--shadow);
 }
 
 .nav-brand {
     font-size: 1.5rem;
     font-weight: 600;
-    color: var(--primary-color);
+    color: var(--text-color);
+}
+
+.bunny-emoji {
+    font-size: 1.2rem;
+    margin: 0 0.5rem;
+}
+
+.nav-links {
+    display: flex;
+    gap: 2rem;
 }
 
 .nav-links a {
-    color: var(--text-color);
     text-decoration: none;
-    margin-left: 2rem;
-    transition: color 0.3s;
+    color: var(--text-color);
+    font-weight: 500;
+    transition: color 0.3s ease;
 }
 
-.nav-links a:hover, .nav-links a.active {
-    color: var(--primary-color);
+.nav-links a:hover {
+    color: var(--dark-pink);
+}
+
+.admin-login {
+    background-color: var(--primary-pink);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
 }
 
 .hero {
-    padding: 8rem 5% 4rem;
+    background-color: var(--primary-pink);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     text-align: center;
-    background: linear-gradient(135deg, #fff1f6 0%, #ffe6f0 100%);
+    padding: 2rem 5%;
 }
 
 .hero h1 {
-    font-size: 2.5rem;
+    font-size: 3rem;
     margin-bottom: 1rem;
-    color: var(--primary-color);
+    color: var(--text-color);
+}
+
+.hero p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+.browse-btn {
+    background-color: var(--white);
+    color: var(--text-color);
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+    box-shadow: 0 4px 15px var(--shadow);
+}
+
+.browse-btn:hover {
+    transform: translateY(-3px);
+}
+
+.collections {
+    padding: 5rem 5%;
 }
 
 .products-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
     gap: 2rem;
-    padding: 2rem 5%;
+    margin-top: 2rem;
 }
 
 .product-card {
-    background: white;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
+    background: var(--white);
+    border-radius: 15px;
     overflow: hidden;
-    transition: transform 0.3s;
+    box-shadow: 0 4px 15px var(--shadow);
+    transition: transform 0.3s ease;
 }
 
 .product-card:hover {
     transform: translateY(-5px);
 }
 
-.product-card img {
+.product-image {
     width: 100%;
-    height: 200px;
+    height: 300px;
     object-fit: cover;
 }
 
@@ -89,14 +135,91 @@ body {
     padding: 1rem;
 }
 
-.product-info h3 {
+.product-name {
+    font-weight: 500;
     margin-bottom: 0.5rem;
 }
 
-.price {
-    color: var(--primary-color);
+.product-price {
+    color: var(--dark-pink);
     font-weight: 600;
-    font-size: 1.2rem;
+}
+
+.newsletter {
+    background-color: var(--primary-pink);
+    padding: 5rem 5%;
+    text-align: center;
+}
+
+.newsletter-form {
+    max-width: 500px;
+    margin: 2rem auto;
+    display: flex;
+    gap: 1rem;
+}
+
+.newsletter-form input {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 25px;
+    outline: none;
+}
+
+.subscribe-btn {
+    background-color: var(--white);
+    color: var(--text-color);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+}
+
+.subscribe-btn:hover {
+    transform: translateY(-2px);
+}
+
+.contact {
+    padding: 5rem 5%;
+    text-align: center;
+}
+
+.contact-form {
+    max-width: 600px;
+    margin: 2rem auto;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+}
+
+.contact-form input,
+.contact-form textarea {
+    padding: 1rem;
+    border: 1px solid var(--primary-pink);
+    border-radius: 10px;
+    outline: none;
+}
+
+.contact-form textarea {
+    min-height: 150px;
+    resize: vertical;
+}
+
+.contact-form button {
+    background-color: var(--primary-pink);
+    color: var(--text-color);
+    border: none;
+    padding: 1rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: transform 0.3s ease;
+}
+
+.contact-form button:hover {
+    transform: translateY(-2px);
 }
 
 .modal {
@@ -106,20 +229,18 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.5);
+    background-color: rgba(0, 0, 0, 0.5);
     z-index: 1001;
 }
 
 .modal-content {
-    background: white;
+    background-color: var(--white);
+    margin: 15% auto;
     padding: 2rem;
-    border-radius: 10px;
     width: 90%;
     max-width: 500px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    border-radius: 15px;
+    position: relative;
 }
 
 .close {
@@ -130,48 +251,14 @@ body {
     cursor: pointer;
 }
 
-.admin-panel {
-    padding: 2rem 5%;
-    background: white;
-    margin: 2rem auto;
-    max-width: 800px;
-    border-radius: 10px;
-    box-shadow: var(--shadow);
-}
-
 .hidden {
     display: none;
 }
 
-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1rem;
-}
-
-input, button {
-    padding: 0.8rem;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-button {
-    background: var(--primary-color);
-    color: white;
-    border: none;
-    cursor: pointer;
-    transition: opacity 0.3s;
-}
-
-button:hover {
-    opacity: 0.9;
-}
-
 footer {
+    background-color: var(--primary-pink);
+    padding: 2rem 5%;
     text-align: center;
-    padding: 2rem;
-    background: white;
     margin-top: 2rem;
 }
 

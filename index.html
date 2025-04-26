@@ -3,29 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Product Gallery</title>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <title>Bunny's Yesstyle Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/animations.css">
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
 </head>
 <body>
     <nav class="navbar">
-        <div class="nav-brand">Product Gallery</div>
+        <div class="nav-brand">
+            <span class="bunny-emoji">🐰</span>
+            Bunny's Yesstyle
+            <span class="bunny-emoji">🐰</span>
+        </div>
         <div class="nav-links">
             <a href="#" class="active">Home</a>
-            <a href="#" id="loginBtn">Login</a>
+            <a href="#collections">Collections</a>
+            <a href="#about">About</a>
+            <a href="#contact">Contact</a>
+            <a href="#" id="loginBtn" class="admin-login">Admin Login</a>
         </div>
     </nav>
 
     <section class="hero">
-        <h1>Welcome to our Product Gallery</h1>
-        <p>Discover amazing products curated just for you</p>
+        <h1>Welcome to Bunny's Yesstyle Collection</h1>
+        <p>Discover cute and trendy fashion items curated just for you</p>
+        <a href="#collections" class="browse-btn">Browse Collection</a>
     </section>
 
-    <div id="products" class="products-grid">
-        <!-- Products will be loaded here -->
-    </div>
+    <section id="collections" class="collections">
+        <h2>Bunny's Yesstyle Collection</h2>
+        <div id="products" class="products-grid">
+            <!-- Products will be loaded here -->
+        </div>
+    </section>
+
+    <section id="about" class="about">
+        <h2>About Our Collection</h2>
+        <p>Welcome to our carefully curated collection of the cutest fashion items from Yesstyle! 
+           We handpick each item to ensure you get the most adorable and trendy pieces.</p>
+    </section>
+
+    <section class="newsletter">
+        <h2>Stay Updated with New Arrivals</h2>
+        <p>Subscribe to our newsletter for exclusive updates and offers!</p>
+        <form id="newsletterForm" class="newsletter-form">
+            <input type="email" placeholder="Your email address" required>
+            <button type="submit" class="subscribe-btn">Subscribe</button>
+        </form>
+    </section>
+
+    <section id="contact" class="contact">
+        <h2>Contact Us</h2>
+        <p>Have any questions? We'd love to hear from you!</p>
+        <form id="contactForm" class="contact-form">
+            <input type="text" placeholder="Your Name" required>
+            <input type="email" placeholder="Your Email" required>
+            <textarea placeholder="Your Message" required></textarea>
+            <button type="submit">Send Message</button>
+        </form>
+    </section>
 
     <!-- Login Modal -->
     <div id="loginModal" class="modal">
@@ -53,28 +90,22 @@
     </div>
 
     <footer>
-        <p>&copy; 2025 Product Gallery. All rights reserved.</p>
+        <p>&copy; 2025 Bunny's Yesstyle Collection. All rights reserved.</p>
     </footer>
 
-    <script>
-        // Load configuration from secure endpoint
-        fetch('/api/config')
-            .then(response => response.json())
-            .then(config => {
-                // Initialize Supabase with secure configuration
-                import('./js/config.js').then(({ initializeSupabase }) => {
-                    initializeSupabase(config.supabaseUrl, config.supabaseKey);
-                    // Load other modules after Supabase is initialized
-                    Promise.all([
-                        import('./js/auth.js'),
-                        import('./js/products.js')
-                    ]);
-                });
-            })
-            .catch(error => {
-                console.error('Error loading configuration:', error);
-                alert('Error loading configuration. Please make sure the server is running.');
-            });
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+        
+        // Initialize Supabase directly (we'll update these values from your Supabase project)
+        const supabaseUrl = 'YOUR_SUPABASE_URL'
+        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
+        const supabase = createClient(supabaseUrl, supabaseKey)
+
+        // Load other modules
+        Promise.all([
+            import('./js/auth.js'),
+            import('./js/products.js')
+        ]);
     </script>
 </body>
 </html>
