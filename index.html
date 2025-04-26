@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Gallery</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">Product Gallery</div>
+        <div class="nav-links">
+            <a href="#" class="active">Home</a>
+            <a href="#" id="loginBtn">Login</a>
+        </div>
+    </nav>
+
+    <section class="hero">
+        <h1>Welcome to our Product Gallery</h1>
+        <p>Discover amazing products curated just for you</p>
+    </section>
+
+    <div id="products" class="products-grid">
+        <!-- Products will be loaded here -->
+    </div>
+
+    <!-- Login Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <h2>Admin Login</h2>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="password" id="password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div id="adminPanel" class="admin-panel hidden">
+        <h2>Add New Product</h2>
+        <form id="productForm">
+            <input type="text" id="productName" placeholder="Product Name" required>
+            <input type="number" id="productPrice" placeholder="Price" step="0.01" required>
+            <input type="url" id="productImage" placeholder="Image URL" required>
+            <input type="url" id="productLink" placeholder="Product Link" required>
+            <button type="submit">Add Product</button>
+        </form>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Product Gallery. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Load configuration from secure endpoint
+        fetch('/api/config')
+            .then(response => response.json())
+            .then(config => {
+                // Initialize Supabase with secure configuration
+                import('./js/config.js').then(({ initializeSupabase }) => {
+                    initializeSupabase(config.supabaseUrl, config.supabaseKey);
+                    // Load other modules after Supabase is initialized
+                    Promise.all([
+                        import('./js/auth.js'),
+                        import('./js/products.js')
+                    ]);
+                });
+            })
+            .catch(error => {
+                console.error('Error loading configuration:', error);
+                alert('Error loading configuration. Please make sure the server is running.');
+            });
+    </script>
+</body>
+</html>
