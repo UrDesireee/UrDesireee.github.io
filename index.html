@@ -74,24 +74,9 @@
     </footer>
 
     <script>
-        // Load environment variables before importing modules
         async function loadAndInitialize() {
             try {
-                const response = await fetch('/.env');
-                const envText = await response.text();
-                const envVars = {};
-                
-                envText.split('\n').forEach(line => {
-                    const [key, value] = line.split('=');
-                    if (key && value) {
-                        envVars[key.trim()] = value.trim();
-                    }
-                });
-
-                // Make env variables available globally
-                window.ENV = envVars;
-                
-                // Now import and initialize modules
+                // Import and initialize modules
                 await Promise.all([
                     import('./js/auth.js'),
                     import('./js/products.js')

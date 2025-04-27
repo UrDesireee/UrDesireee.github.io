@@ -1,15 +1,13 @@
 // Supabase configuration
 const supabaseConfig = {
-    url: '', // Will be set from HTML
-    key: '', // Will be set from HTML
+    url: 'https://vuexvuxmbsspltewgleq.supabase.co',
+    key: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ1ZXh2dXhtYnNzcGx0ZXdnbGVxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2OTYzNzAsImV4cCI6MjA2MTI3MjM3MH0.j-WxT7lIxZfTwoBnzhcPdZPNjrCNexdXSq8qtOLsHTw'
 };
 
 // Initialize Supabase client
 let supabase = null;
 
-function initializeSupabase(url, key) {
-    supabaseConfig.url = url;
-    supabaseConfig.key = key;
+function initializeSupabase() {
     supabase = supabaseClient.createClient(supabaseConfig.url, supabaseConfig.key);
 }
 
@@ -22,36 +20,10 @@ const checkUser = async () => {
     return user;
 };
 
-async function loadEnvVariables() {
-    try {
-        const response = await fetch('/.env');
-        const text = await response.text();
-        
-        // Parse .env file content
-        const envVars = {};
-        text.split('\n').forEach(line => {
-            const [key, value] = line.split('=');
-            if (key && value) {
-                envVars[key.trim()] = value.trim();
-            }
-        });
-        
-        return envVars;
-    } catch (error) {
-        console.error('Error loading environment variables:', error);
-        return {};
-    }
-}
-
-let envVariables = null;
-
 export async function getConfig() {
-    if (!envVariables) {
-        envVariables = await loadEnvVariables();
-    }
     return {
-        supabaseUrl: envVariables.SUPABASE_URL,
-        supabaseKey: envVariables.SUPABASE_ANON_KEY
+        supabaseUrl: supabaseConfig.url,
+        supabaseKey: supabaseConfig.key
     };
 }
 
