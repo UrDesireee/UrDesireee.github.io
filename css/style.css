@@ -550,6 +550,19 @@ footer {
     margin-top: 1.5rem;
 }
 
+.admin-nav .cute-button {
+    margin: 0;
+    padding: 0.8rem 1.5rem;
+    min-width: auto;
+    background: var(--light-pink);
+    color: var(--text-color);
+}
+
+.admin-nav .cute-button:hover {
+    background: var(--primary-pink);
+    color: var(--white);
+}
+
 .admin-nav-btn {
     background: var(--light-pink);
     border: none;
@@ -558,10 +571,12 @@ footer {
     cursor: pointer;
     font-weight: 500;
     transition: all 0.3s ease;
+    color: var(--text-color);
 }
 
 .admin-nav-btn.active {
     background: var(--primary-pink);
+    color: var(--white);
     transform: translateY(-2px);
     box-shadow: 0 4px 10px var(--shadow);
 }

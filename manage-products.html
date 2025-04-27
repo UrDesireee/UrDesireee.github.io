@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin Dashboard - Bunny's Yesstyle Collection</title>
+    <title>Manage Products - Bunny's Yesstyle Collection</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/animations.css">
@@ -19,7 +19,7 @@
             </a>
         </div>
         <div class="nav-links">
-            <a href="index.html">View Site</a>
+            <a href="admin-dashboard.html">Back to Dashboard</a>
             <a href="#" id="logoutBtn" class="admin-login">Logout</a>
         </div>
     </nav>
@@ -27,50 +27,16 @@
     <div class="admin-dashboard">
         <div class="admin-panel">
             <div class="admin-header">
-                <h2>🐰 Admin Dashboard</h2>
-                <div class="admin-nav">
-                    <button class="admin-nav-btn active" data-tab="add">Add Product</button>
-                    <a href="manage-products.html" class="cute-button">
-                        <span class="button-icon">📋</span> Manage Products
-                    </a>
-                </div>
+                <h2>🐰 Manage Products</h2>
             </div>
 
             <div class="admin-content">
-                <div id="addProductTab" class="admin-tab active">
-                    <form id="productForm">
-                        <div class="form-group">
-                            <label for="productName">Product Name</label>
-                            <input type="text" id="productName" placeholder="Enter cute product name" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="productPrice">Price ($)</label>
-                            <input type="number" id="productPrice" placeholder="0.00" step="0.01" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="productImage">Image URL</label>
-                            <input type="url" id="productImage" placeholder="https://..." required>
-                        </div>
-                        <div class="form-group">
-                            <label for="productLink">YesStyle Link</label>
-                            <input type="url" id="productLink" placeholder="https://www.yesstyle.com/..." required>
-                        </div>
-                        <div class="form-actions">
-                            <button type="submit" class="cute-button">
-                                <span class="button-icon">✨</span> Add Product
-                            </button>
-                        </div>
-                    </form>
-                </div>
-
-                <div id="manageProductsTab" class="admin-tab">
-                    <div class="products-management">
-                        <div class="search-bar">
-                            <input type="text" id="searchProducts" class="search-input" placeholder="Search products by name...">
-                        </div>
-                        <div id="productsList" class="products-list">
-                            <!-- Products will be loaded here -->
-                        </div>
+                <div class="products-management">
+                    <div class="search-bar">
+                        <input type="text" id="searchProducts" class="search-input" placeholder="Search products by name...">
+                    </div>
+                    <div id="productsList" class="products-list">
+                        <!-- Products will be loaded here -->
                     </div>
                 </div>
             </div>
@@ -83,7 +49,7 @@
 
         let supabase = null;
 
-        class DashboardManager {
+        class ProductsManager {
             constructor() {
                 this.init();
             }
@@ -109,12 +75,7 @@
 
             setupEventListeners() {
                 document.getElementById('logoutBtn').addEventListener('click', () => this.handleLogout());
-                document.getElementById('productForm').addEventListener('submit', (e) => this.handleProductSubmit(e));
                 
-                document.querySelectorAll('.admin-nav-btn').forEach(btn => {
-                    btn.addEventListener('click', () => this.switchTab(btn.dataset.tab));
-                });
-
                 const searchInput = document.getElementById('searchProducts');
                 if (searchInput) {
                     searchInput.addEventListener('input', () => this.debounce(() => this.searchProducts(), 300));
@@ -132,67 +93,6 @@
                     }, 1000);
                 } catch (error) {
                     this.showNotification('Logout failed: ' + error.message, 'error');
-                }
-            }
-
-            async handleProductSubmit(e) {
-                e.preventDefault();
-                const form = e.target;
-                const submitButton = form.querySelector('button[type="submit"]');
-                
-                try {
-                    submitButton.disabled = true;
-                    submitButton.innerHTML = '<span class="button-icon">⏳</span> Processing...';
-
-                    const productData = {
-                        name: document.getElementById('productName').value,
-                        price: parseFloat(document.getElementById('productPrice').value),
-                        image_url: document.getElementById('productImage').value,
-                        product_link: document.getElementById('productLink').value,
-                        created_at: new Date().toISOString()
-                    };
-
-                    let error;
-                    if (submitButton._editId) {
-                        ({ error } = await supabase
-                            .from('products')
-                            .update(productData)
-                            .eq('id', submitButton._editId));
-                    } else {
-                        ({ error } = await supabase
-                            .from('products')
-                            .insert([productData]));
-                    }
-
-                    if (error) throw error;
-
-                    this.showNotification(
-                        submitButton._editId ? 'Product updated successfully! 🎉' : 'Product added successfully! ✨', 
-                        'success'
-                    );
-                    
-                    form.reset();
-                    submitButton._editId = null;
-                    submitButton.innerHTML = '<span class="button-icon">✨</span> Add Product';
-                    this.loadProducts();
-                } catch (error) {
-                    this.showNotification(error.message, 'error');
-                } finally {
-                    submitButton.disabled = false;
-                }
-            }
-
-            switchTab(tabId) {
-                document.querySelectorAll('.admin-nav-btn').forEach(btn => {
-                    btn.classList.toggle('active', btn.dataset.tab === tabId);
-                });
-
-                document.querySelectorAll('.admin-tab').forEach(tab => {
-                    tab.classList.toggle('active', tab.id === tabId + 'ProductTab');
-                });
-
-                if (tabId === 'manage') {
-                    this.loadProducts();
                 }
             }
 
@@ -285,9 +185,9 @@
             }
         }
 
-        // Initialize dashboard when DOM is loaded
+        // Initialize products manager when DOM is loaded
         document.addEventListener('DOMContentLoaded', () => {
-            new DashboardManager();
+            new ProductsManager();
         });
 
         // Make these functions available globally for the onclick handlers
@@ -301,16 +201,8 @@
 
                 if (error) throw error;
 
-                document.getElementById('productName').value = product.name;
-                document.getElementById('productPrice').value = product.price;
-                document.getElementById('productImage').value = product.image_url;
-                document.getElementById('productLink').value = product.product_link;
-
-                const submitButton = document.getElementById('productForm').querySelector('button[type="submit"]');
-                submitButton.innerHTML = '<span class="button-icon">✏️</span> Update Product';
-                submitButton._editId = id;
-
-                document.querySelector('[data-tab="add"]').click();
+                // Redirect to admin dashboard with edit parameters
+                window.location.href = `admin-dashboard.html?edit=${id}`;
             } catch (error) {
                 showNotification('Failed to load product: ' + error.message, 'error');
             }
@@ -328,7 +220,7 @@
                 if (error) throw error;
 
                 showNotification('Product deleted successfully! 🗑️', 'success');
-                document.querySelector('.admin-nav-btn[data-tab="manage"]').click();
+                window.location.reload();
             } catch (error) {
                 showNotification('Failed to delete product: ' + error.message, 'error');
             }
