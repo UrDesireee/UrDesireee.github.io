@@ -93,19 +93,35 @@
         <p>&copy; 2025 Bunny's Yesstyle Collection. All rights reserved.</p>
     </footer>
 
-    <script type="module">
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-        
-        // Initialize Supabase directly (we'll update these values from your Supabase project)
-        const supabaseUrl = 'YOUR_SUPABASE_URL'
-        const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
-        const supabase = createClient(supabaseUrl, supabaseKey)
+    <script>
+        // Load environment variables before importing modules
+        async function loadAndInitialize() {
+            try {
+                const response = await fetch('/.env');
+                const envText = await response.text();
+                const envVars = {};
+                
+                envText.split('\n').forEach(line => {
+                    const [key, value] = line.split('=');
+                    if (key && value) {
+                        envVars[key.trim()] = value.trim();
+                    }
+                });
 
-        // Load other modules
-        Promise.all([
-            import('./js/auth.js'),
-            import('./js/products.js')
-        ]);
+                // Make env variables available globally
+                window.ENV = envVars;
+                
+                // Now import and initialize modules
+                await Promise.all([
+                    import('./js/auth.js'),
+                    import('./js/products.js')
+                ]);
+            } catch (error) {
+                console.error('Error initializing application:', error);
+            }
+        }
+
+        loadAndInitialize();
     </script>
 </body>
 </html>

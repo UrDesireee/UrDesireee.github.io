@@ -1,8 +1,13 @@
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { getConfig } from './config.js'
 
-const supabaseUrl = 'YOUR_SUPABASE_URL'
-const supabaseKey = 'YOUR_SUPABASE_ANON_KEY'
-const supabase = createClient(supabaseUrl, supabaseKey)
+let supabase = null;
+
+async function initializeSupabase() {
+    const config = await getConfig();
+    supabase = createClient(config.supabaseUrl, config.supabaseKey);
+    return supabase;
+}
 
 class AuthManager {
     constructor() {
@@ -12,6 +17,11 @@ class AuthManager {
         this.adminPanel = document.getElementById('adminPanel');
         this.closeBtn = document.querySelector('.close');
         
+        this.init();
+    }
+
+    async init() {
+        await initializeSupabase();
         this.setupEventListeners();
         this.checkSession();
     }
