@@ -13,6 +13,7 @@ class ProductManager {
     constructor() {
         this.productsGrid = document.getElementById('products');
         this.productForm = document.getElementById('productForm');
+        this.currentEditId = null;
         this.init();
     }
 
@@ -21,9 +22,9 @@ class ProductManager {
             await initializeSupabase();
             this.setupEventListeners();
             await this.loadProducts();
-            this.showNotification('Website loaded successfully!', 'info');
+            this.showNotification('Website loaded successfully! 🎀', 'info');
         } catch (error) {
-            this.showNotification('Failed to initialize the website. Please check your configuration.', 'error');
+            this.showNotification('Failed to initialize the website 😢', 'error');
             console.error('Initialization error:', error);
         }
     }
@@ -38,6 +39,10 @@ class ProductManager {
             e.preventDefault();
             document.querySelector('#collections').scrollIntoView({ behavior: 'smooth' });
         });
+
+        // Make edit and delete functions available globally
+        window.editProduct = (id) => this.editProduct(id);
+        window.deleteProduct = (id) => this.deleteProduct(id);
     }
 
     async loadProducts() {
@@ -70,7 +75,7 @@ class ProductManager {
         
         try {
             submitButton.disabled = true;
-            submitButton.textContent = 'Adding...';
+            submitButton.innerHTML = '<span class="button-icon">⏳</span> Processing...';
             
             const productData = {
                 name: document.getElementById('productName').value,
@@ -80,24 +85,85 @@ class ProductManager {
                 created_at: new Date().toISOString()
             };
 
-            const { error } = await supabase
-                .from('products')
-                .insert([productData]);
+            let error;
+            if (this.currentEditId) {
+                ({ error } = await supabase
+                    .from('products')
+                    .update(productData)
+                    .eq('id', this.currentEditId));
+            } else {
+                ({ error } = await supabase
+                    .from('products')
+                    .insert([productData]));
+            }
 
             if (error) throw error;
 
-            this.showNotification('Product added successfully!', 'success');
+            this.showNotification(
+                this.currentEditId ? 'Product updated successfully! 🎉' : 'Product added successfully! ✨', 
+                'success'
+            );
+            
             form.reset();
+            this.currentEditId = null;
+            submitButton.innerHTML = '<span class="button-icon">✨</span> Add Product';
             await this.loadProducts();
         } catch (error) {
             this.showNotification(error.message, 'error');
         } finally {
             submitButton.disabled = false;
-            submitButton.textContent = 'Add Product';
+        }
+    }
+
+    async editProduct(id) {
+        try {
+            const { data: product, error } = await supabase
+                .from('products')
+                .select('*')
+                .eq('id', id)
+                .single();
+
+            if (error) throw error;
+
+            // Fill the form with product data
+            document.getElementById('productName').value = product.name;
+            document.getElementById('productPrice').value = product.price;
+            document.getElementById('productImage').value = product.image_url;
+            document.getElementById('productLink').value = product.product_link;
+
+            // Update form for edit mode
+            this.currentEditId = id;
+            const submitButton = this.productForm.querySelector('button[type="submit"]');
+            submitButton.innerHTML = '<span class="button-icon">✏️</span> Update Product';
+
+            // Switch to add product tab
+            document.querySelector('[data-tab="add"]').click();
+        } catch (error) {
+            this.showNotification('Failed to load product: ' + error.message, 'error');
+        }
+    }
+
+    async deleteProduct(id) {
+        if (!confirm('Are you sure you want to delete this product? 🗑️')) return;
+
+        try {
+            const { error } = await supabase
+                .from('products')
+                .delete()
+                .eq('id', id);
+
+            if (error) throw error;
+
+            this.showNotification('Product deleted successfully! 🗑️', 'success');
+            await this.loadProducts();
+        } catch (error) {
+            this.showNotification('Failed to delete product: ' + error.message, 'error');
         }
     }
 
     renderProducts(products) {
+        if (!this.productsGrid) return;
+        
         this.productsGrid.innerHTML = '';
         products.forEach((product, index) => {
             const productCard = document.createElement('div');
@@ -117,25 +183,31 @@ class ProductManager {
     }
 
     showLoading() {
-        this.productsGrid.innerHTML = '<div class="loading"></div>';
+        if (this.productsGrid) {
+            this.productsGrid.innerHTML = '<div class="loading"></div>';
+        }
     }
 
     showEmptyState() {
-        this.productsGrid.innerHTML = `
-            <div class="empty-state">
-                <p>No products found in the collection yet! 🐰</p>
-                ${this.isAdmin() ? '<p>Add some products using the form above!</p>' : ''}
-            </div>
-        `;
+        if (this.productsGrid) {
+            this.productsGrid.innerHTML = `
+                <div class="empty-state">
+                    <p>No products found in the collection yet! 🐰</p>
+                    ${this.isAdmin() ? '<p>Add some products using the form above!</p>' : ''}
+                </div>
+            `;
+        }
     }
 
     showErrorState() {
-        this.productsGrid.innerHTML = `
-            <div class="error-state">
-                <p>Oops! Something went wrong while loading the products. 😢</p>
-                <button onclick="window.location.reload()">Try Again</button>
-            </div>
-        `;
+        if (this.productsGrid) {
+            this.productsGrid.innerHTML = `
+                <div class="error-state">
+                    <p>Oops! Something went wrong while loading the products 😢</p>
+                    <button onclick="window.location.reload()">Try Again</button>
+                </div>
+            `;
+        }
     }
 
     isAdmin() {
@@ -151,6 +223,13 @@ class ProductManager {
         setTimeout(() => {
             notification.remove();
         }, 3000);
+    }
+
+    hideLoading() {
+        const loading = this.productsGrid?.querySelector('.loading');
+        if (loading) {
+            loading.remove();
+        }
     }
 }
 
