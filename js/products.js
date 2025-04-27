@@ -71,16 +71,29 @@ class ProductManager {
             this.showLoading();
             const { data: products, error } = await this.supabase
                 .from('products')
-                .select('*, categories(name)')
+                .select('*')
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
 
-            this.allProducts = products;
-            if (products.length === 0) {
+            // Get categories separately
+            const { data: categories } = await this.supabase
+                .from('categories')
+                .select('id, name');
+
+            // Map category names to products
+            this.allProducts = products.map(product => {
+                const category = categories?.find(c => c.id === product.category);
+                return {
+                    ...product,
+                    categories: category ? { name: category.name } : null
+                };
+            });
+
+            if (this.allProducts.length === 0) {
                 this.showEmptyState();
             } else {
-                this.renderProducts(products);
+                this.renderProducts(this.allProducts);
             }
         } catch (error) {
             console.error('Error loading products:', error);
