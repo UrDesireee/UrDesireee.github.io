@@ -92,19 +92,18 @@
         <p>&copy; 2025 Bunny's Yesstyle Collection. All rights reserved.</p>
     </footer>
 
-    <script>
+    <script type="module">
+        import ProductManager from './js/products.js';
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+        import { getConfig } from './js/config.js';
+
         async function loadAndInitialize() {
             try {
-                // Import and initialize modules
-                const [authModule, productsModule] = await Promise.all([
-                    import('./js/auth.js'),
-                    import('./js/products.js')
-                ]);
-
-                const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
-                const { getConfig } = await import('./js/config.js');
                 const config = await getConfig();
                 const supabase = createClient(config.supabaseUrl, config.supabaseKey);
+
+                // Initialize product display
+                new ProductManager();
 
                 // Handle newsletter form submission
                 const newsletterForm = document.getElementById('newsletterForm');

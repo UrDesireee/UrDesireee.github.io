@@ -170,29 +170,47 @@
                     submitButton.disabled = true;
                     submitButton.innerHTML = '<span class="button-icon">⏳</span> Processing...';
                     
+                    const category = document.getElementById('productCategory').value;
+                    if (!category) {
+                        throw new Error('Please select a category');
+                    }
+
                     const productData = {
                         name: document.getElementById('productName').value,
-                        category: document.getElementById('productCategory').value,
+                        category: category,
                         price: parseFloat(document.getElementById('productPrice').value),
                         image_url: document.getElementById('productImage').value,
                         product_link: document.getElementById('productLink').value,
                         created_at: new Date().toISOString()
                     };
 
-                    const { error } = await supabase
-                        .from('products')
-                        .insert([productData]);
+                    let error;
+                    if (submitButton._editId) {
+                        ({ error } = await supabase
+                            .from('products')
+                            .update(productData)
+                            .eq('id', submitButton._editId));
+                    } else {
+                        ({ error } = await supabase
+                            .from('products')
+                            .insert([productData]));
+                    }
 
                     if (error) throw error;
 
-                    this.showNotification('Product added successfully! ✨', 'success');
+                    this.showNotification(
+                        submitButton._editId ? 'Product updated successfully! 🎉' : 'Product added successfully! ✨', 
+                        'success'
+                    );
+                    
                     form.reset();
+                    submitButton._editId = null;
+                    submitButton.innerHTML = '<span class="button-icon">✨</span> Add Product';
                     this.loadProducts();
                 } catch (error) {
                     this.showNotification(error.message, 'error');
                 } finally {
                     submitButton.disabled = false;
-                    submitButton.innerHTML = '<span class="button-icon">✨</span> Add Product';
                 }
             }
 
