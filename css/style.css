@@ -576,6 +576,58 @@ footer {
 
 .form-group {
     margin-bottom: 1.5rem;
+    width: 100%;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--light-pink);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    background: var(--white);
+    color: var(--text-color);
+}
+
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    outline: none;
+    border-color: var(--primary-pink);
+    box-shadow: 0 4px 10px var(--shadow);
+}
+
+.cute-button {
+    background: linear-gradient(135deg, var(--primary-pink), var(--accent-purple));
+    color: var(--white);
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: var(--border-radius-lg);
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: auto;
+    min-width: 200px;
+    margin-left: auto;
+    margin-right: 0;
+}
+
+.cute-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px var(--shadow);
+}
+
+.cute-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .form-group label {
@@ -619,12 +671,13 @@ footer {
     width: 100%;
     padding: 1rem;
     border: 2px solid var(--light-pink);
-    border-radius: var(--border-radius-lg);
-    outline: none;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
     transition: all 0.3s ease;
 }
 
 .search-bar input:focus {
+    outline: none;
     border-color: var(--primary-pink);
     box-shadow: 0 4px 10px var(--shadow);
 }
@@ -890,6 +943,20 @@ footer {
 .admin-dashboard {
     padding: 2rem 5%;
     margin-top: 80px;
+}
+
+.admin-panel {
+    background: var(--white);
+    padding: 2.5rem;
+    border-radius: var(--border-radius-lg);
+    box-shadow: 0 10px 30px var(--shadow);
+    margin: 0 auto;
+    max-width: 1200px;
+    border: 3px solid var(--light-pink);
+}
+
+.admin-content {
+    margin-top: 2rem;
 }
 
 /* Search and Filter UI */
@@ -1265,4 +1332,70 @@ footer {
     .contact-methods {
         grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
     }
+}
+
+/* Products management styles */
+.products-management {
+    background: var(--white);
+    border-radius: var(--border-radius);
+    padding: 2rem;
+}
+
+.search-bar {
+    margin-bottom: 2rem;
+}
+
+.search-bar input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid var(--light-pink);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-bar input:focus {
+    outline: none;
+    border-color: var(--primary-pink);
+    box-shadow: 0 4px 10px var(--shadow);
+}
+
+.products-list {
+    display: grid;
+    gap: 1rem;
+    max-height: 600px;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.products-list::-webkit-scrollbar {
+    width: 8px;
+}
+
+.products-list::-webkit-scrollbar-track {
+    background: var(--light-pink);
+    border-radius: 4px;
+}
+
+.products-list::-webkit-scrollbar-thumb {
+    background: var(--primary-pink);
+    border-radius: 4px;
+}
+
+.product-item {
+    background: var(--white);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    border: 2px solid var(--light-pink);
+    display: grid;
+    grid-template-columns: 100px 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+.product-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px var(--shadow);
+    border-color: var(--primary-pink);
 }

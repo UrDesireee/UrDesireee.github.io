@@ -53,16 +53,18 @@
                             <label for="productLink">YesStyle Link</label>
                             <input type="url" id="productLink" placeholder="https://www.yesstyle.com/..." required>
                         </div>
-                        <button type="submit" class="cute-button">
-                            <span class="button-icon">✨</span> Add Product
-                        </button>
+                        <div class="form-actions">
+                            <button type="submit" class="cute-button">
+                                <span class="button-icon">✨</span> Add Product
+                            </button>
+                        </div>
                     </form>
                 </div>
 
                 <div id="manageProductsTab" class="admin-tab">
                     <div class="products-management">
                         <div class="search-bar">
-                            <input type="text" id="searchProducts" placeholder="Search products...">
+                            <input type="text" id="searchProducts" class="search-input" placeholder="Search products by name...">
                         </div>
                         <div id="productsList" class="products-list">
                             <!-- Products will be loaded here -->
