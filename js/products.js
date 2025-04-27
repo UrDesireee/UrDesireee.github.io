@@ -105,7 +105,7 @@ class ProductManager {
             productCard.style.animationDelay = `${index * 0.1}s`;
             productCard.innerHTML = `
                 <img src="${product.image_url}" alt="${product.name}" class="product-image" 
-                     onerror="this.src='./assets/placeholder.jpg'">
+                     onerror="this.src='./assets/placeholder.svg'">
                 <div class="product-info">
                     <h3 class="product-name">${product.name}</h3>
                     <p class="product-price">$${product.price.toFixed(2)}</p>
