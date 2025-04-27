@@ -166,9 +166,10 @@ body {
 }
 
 .collections {
+    position: relative;
     padding: 5rem 5%;
     background: linear-gradient(135deg, #FFF8FA, var(--light-pink));
-    margin: 2rem 0;
+    margin: 0;
 }
 
 .products-grid {
@@ -251,11 +252,12 @@ body {
 }
 
 .newsletter {
+    position: relative;
     background: linear-gradient(135deg, var(--accent-purple), var(--primary-pink));
     padding: 5rem 5%;
     text-align: center;
     color: var(--white);
-    margin: 2rem 0;
+    margin: 0;
 }
 
 .newsletter-form {
@@ -1030,9 +1032,10 @@ footer {
 
 /* About Section Styles */
 .about {
+    position: relative;
     background: linear-gradient(135deg, var(--light-pink), #FFF8FA);
     padding: 5rem 0;
-    margin: 2rem 0;
+    margin: 0;
 }
 
 .about-container {
@@ -1100,6 +1103,37 @@ footer {
     background: var(--white);
     margin-top: -50px;
     border-radius: 50% 50% 0 0;
+}
+
+/* Replace curved dividers with subtle gradient transitions */
+.collections::before,
+.about::before,
+.newsletter::before {
+    content: '';
+    position: absolute;
+    top: -100px;
+    left: 0;
+    width: 100%;
+    height: 100px;
+    background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.5));
+    pointer-events: none;
+}
+
+/* Enhanced section transitions */
+.collections::after,
+.about::after,
+.newsletter::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(to right, 
+        transparent, 
+        rgba(255, 255, 255, 0.5), 
+        transparent
+    );
 }
 
 /* Contact Page Styles */

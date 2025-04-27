@@ -80,8 +80,11 @@
         <h2>Stay Updated with New Arrivals</h2>
         <p>Subscribe to our newsletter for exclusive updates and offers!</p>
         <form id="newsletterForm" class="newsletter-form">
-            <input type="email" placeholder="Your email address" required>
-            <button type="submit" class="subscribe-btn">Subscribe</button>
+            <input type="email" id="newsletterEmail" placeholder="Your email address" required>
+            <button type="submit" class="subscribe-btn">
+                <span class="button-text">Subscribe</span>
+                <span class="loading-spinner" style="display: none;">⏳</span>
+            </button>
         </form>
     </section>
 
@@ -93,10 +96,53 @@
         async function loadAndInitialize() {
             try {
                 // Import and initialize modules
-                await Promise.all([
+                const [authModule, productsModule] = await Promise.all([
                     import('./js/auth.js'),
                     import('./js/products.js')
                 ]);
+
+                const { createClient } = await import('https://esm.sh/@supabase/supabase-js@2');
+                const { getConfig } = await import('./js/config.js');
+                const config = await getConfig();
+                const supabase = createClient(config.supabaseUrl, config.supabaseKey);
+
+                // Handle newsletter form submission
+                const newsletterForm = document.getElementById('newsletterForm');
+                newsletterForm.addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    const email = document.getElementById('newsletterEmail').value;
+                    const button = newsletterForm.querySelector('button');
+                    const buttonText = button.querySelector('.button-text');
+                    const loadingSpinner = button.querySelector('.loading-spinner');
+
+                    try {
+                        button.disabled = true;
+                        buttonText.style.display = 'none';
+                        loadingSpinner.style.display = 'inline-block';
+
+                        const { data, error } = await supabase
+                            .from('newsletter_subscribers')
+                            .insert([{ 
+                                email,
+                                subscribed_at: new Date().toISOString()
+                            }]);
+
+                        if (error) throw error;
+
+                        showNotification('Successfully subscribed to the newsletter! 🎉', 'success');
+                        newsletterForm.reset();
+                    } catch (error) {
+                        if (error.code === '23505') { // Unique constraint error
+                            showNotification('This email is already subscribed! 📧', 'info');
+                        } else {
+                            showNotification('Failed to subscribe: ' + error.message, 'error');
+                        }
+                    } finally {
+                        button.disabled = false;
+                        buttonText.style.display = 'inline-block';
+                        loadingSpinner.style.display = 'none';
+                    }
+                });
 
                 // Initialize mobile menu
                 const menuToggle = document.querySelector('.menu-toggle');
@@ -144,6 +190,17 @@
             } catch (error) {
                 console.error('Error initializing application:', error);
             }
+        }
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
         }
 
         loadAndInitialize();
