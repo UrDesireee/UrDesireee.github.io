@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Bunny's Yesstyle Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="index.html">
+                <span class="bunny-emoji">🐰</span>
+                Bunny's Yesstyle
+                <span class="bunny-emoji">🐰</span>
+            </a>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">View Site</a>
+            <a href="#" id="logoutBtn" class="admin-login">Logout</a>
+        </div>
+    </nav>
+
+    <div class="admin-dashboard">
+        <div class="admin-panel">
+            <div class="admin-header">
+                <h2>🐰 Admin Dashboard</h2>
+                <div class="admin-nav">
+                    <button class="admin-nav-btn active" data-tab="add">Add Product</button>
+                    <button class="admin-nav-btn" data-tab="manage">Manage Products</button>
+                </div>
+            </div>
+
+            <div class="admin-content">
+                <div id="addProductTab" class="admin-tab active">
+                    <form id="productForm">
+                        <div class="form-group">
+                            <label for="productName">Product Name</label>
+                            <input type="text" id="productName" placeholder="Enter cute product name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productPrice">Price ($)</label>
+                            <input type="number" id="productPrice" placeholder="0.00" step="0.01" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productImage">Image URL</label>
+                            <input type="url" id="productImage" placeholder="https://..." required>
+                        </div>
+                        <div class="form-group">
+                            <label for="productLink">YesStyle Link</label>
+                            <input type="url" id="productLink" placeholder="https://www.yesstyle.com/..." required>
+                        </div>
+                        <button type="submit" class="cute-button">
+                            <span class="button-icon">✨</span> Add Product
+                        </button>
+                    </form>
+                </div>
+
+                <div id="manageProductsTab" class="admin-tab">
+                    <div class="products-management">
+                        <div class="search-bar">
+                            <input type="text" id="searchProducts" placeholder="Search products...">
+                        </div>
+                        <div id="productsList" class="products-list">
+                            <!-- Products will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+        import { getConfig } from './js/config.js'
+
+        let supabase = null;
+
+        class DashboardManager {
+            constructor() {
+                this.init();
+            }
+
+            async init() {
+                await this.initializeSupabase();
+                await this.checkAuth();
+                this.setupEventListeners();
+                this.loadProducts();
+            }
+
+            async initializeSupabase() {
+                const config = await getConfig();
+                supabase = createClient(config.supabaseUrl, config.supabaseKey);
+            }
+
+            async checkAuth() {
+                const { data: { session } } = await supabase.auth.getSession();
+                if (!session) {
+                    window.location.href = 'admin-login.html';
+                }
+            }
+
+            setupEventListeners() {
+                document.getElementById('logoutBtn').addEventListener('click', () => this.handleLogout());
+                document.getElementById('productForm').addEventListener('submit', (e) => this.handleProductSubmit(e));
+                
+                document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+                    btn.addEventListener('click', () => this.switchTab(btn.dataset.tab));
+                });
+
+                const searchInput = document.getElementById('searchProducts');
+                if (searchInput) {
+                    searchInput.addEventListener('input', () => this.debounce(() => this.searchProducts(), 300));
+                }
+            }
+
+            async handleLogout() {
+                try {
+                    const { error } = await supabase.auth.signOut();
+                    if (error) throw error;
+                    
+                    this.showNotification('Logged out successfully! 👋', 'info');
+                    setTimeout(() => {
+                        window.location.href = 'index.html';
+                    }, 1000);
+                } catch (error) {
+                    this.showNotification('Logout failed: ' + error.message, 'error');
+                }
+            }
+
+            async handleProductSubmit(e) {
+                e.preventDefault();
+                const form = e.target;
+                const submitButton = form.querySelector('button[type="submit"]');
+                
+                try {
+                    submitButton.disabled = true;
+                    submitButton.innerHTML = '<span class="button-icon">⏳</span> Processing...';
+                    
+                    const productData = {
+                        name: document.getElementById('productName').value,
+                        price: parseFloat(document.getElementById('productPrice').value),
+                        image_url: document.getElementById('productImage').value,
+                        product_link: document.getElementById('productLink').value,
+                        created_at: new Date().toISOString()
+                    };
+
+                    const { error } = await supabase
+                        .from('products')
+                        .insert([productData]);
+
+                    if (error) throw error;
+
+                    this.showNotification('Product added successfully! ✨', 'success');
+                    form.reset();
+                    this.loadProducts();
+                } catch (error) {
+                    this.showNotification(error.message, 'error');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = '<span class="button-icon">✨</span> Add Product';
+                }
+            }
+
+            switchTab(tabId) {
+                document.querySelectorAll('.admin-nav-btn').forEach(btn => {
+                    btn.classList.toggle('active', btn.dataset.tab === tabId);
+                });
+
+                document.querySelectorAll('.admin-tab').forEach(tab => {
+                    tab.classList.toggle('active', tab.id === tabId + 'ProductTab');
+                });
+
+                if (tabId === 'manage') {
+                    this.loadProducts();
+                }
+            }
+
+            async loadProducts() {
+                const productsList = document.getElementById('productsList');
+                if (!productsList) return;
+
+                try {
+                    productsList.innerHTML = '<div class="loading"></div>';
+                    const { data: products, error } = await supabase
+                        .from('products')
+                        .select('*')
+                        .order('created_at', { ascending: false });
+
+                    if (error) throw error;
+
+                    this.renderProductsList(products);
+                } catch (error) {
+                    this.showNotification('Failed to load products: ' + error.message, 'error');
+                    productsList.innerHTML = '<div class="error-state"><p>Failed to load products 😢</p></div>';
+                }
+            }
+
+            renderProductsList(products) {
+                const productsList = document.getElementById('productsList');
+                if (!products.length) {
+                    productsList.innerHTML = '<div class="empty-state"><p>No products found 🐰</p></div>';
+                    return;
+                }
+
+                productsList.innerHTML = products.map(product => `
+                    <div class="product-item" data-id="${product.id}">
+                        <img src="${product.image_url}" alt="${product.name}" 
+                             onerror="this.src='./assets/placeholder.svg'">
+                        <div class="product-item-info">
+                            <h3>${product.name}</h3>
+                            <p>$${product.price.toFixed(2)}</p>
+                        </div>
+                        <div class="product-item-actions">
+                            <button class="action-btn edit-btn" onclick="editProduct('${product.id}')">✏️</button>
+                            <button class="action-btn delete-btn" onclick="deleteProduct('${product.id}')">🗑️</button>
+                        </div>
+                    </div>
+                `).join('');
+            }
+
+            async searchProducts() {
+                const query = document.getElementById('searchProducts').value.toLowerCase();
+                const { data: products, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error) {
+                    this.showNotification('Search failed: ' + error.message, 'error');
+                    return;
+                }
+
+                const filteredProducts = products.filter(product => 
+                    product.name.toLowerCase().includes(query)
+                );
+
+                this.renderProductsList(filteredProducts);
+            }
+
+            showNotification(message, type) {
+                const notification = document.createElement('div');
+                notification.className = `notification ${type}`;
+                notification.textContent = message;
+                document.body.appendChild(notification);
+
+                setTimeout(() => {
+                    notification.remove();
+                }, 3000);
+            }
+
+            debounce(func, wait) {
+                let timeout;
+                return function executedFunction(...args) {
+                    const later = () => {
+                        clearTimeout(timeout);
+                        func(...args);
+                    };
+                    clearTimeout(timeout);
+                    timeout = setTimeout(later, wait);
+                };
+            }
+        }
+
+        // Initialize dashboard when DOM is loaded
+        document.addEventListener('DOMContentLoaded', () => {
+            new DashboardManager();
+        });
+
+        // Make these functions available globally for the onclick handlers
+        window.editProduct = async (id) => {
+            try {
+                const { data: product, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .eq('id', id)
+                    .single();
+
+                if (error) throw error;
+
+                document.getElementById('productName').value = product.name;
+                document.getElementById('productPrice').value = product.price;
+                document.getElementById('productImage').value = product.image_url;
+                document.getElementById('productLink').value = product.product_link;
+
+                const submitButton = document.getElementById('productForm').querySelector('button[type="submit"]');
+                submitButton.innerHTML = '<span class="button-icon">✏️</span> Update Product';
+                submitButton._editId = id;
+
+                document.querySelector('[data-tab="add"]').click();
+            } catch (error) {
+                showNotification('Failed to load product: ' + error.message, 'error');
+            }
+        };
+
+        window.deleteProduct = async (id) => {
+            if (!confirm('Are you sure you want to delete this product? 🗑️')) return;
+
+            try {
+                const { error } = await supabase
+                    .from('products')
+                    .delete()
+                    .eq('id', id);
+
+                if (error) throw error;
+
+                showNotification('Product deleted successfully! 🗑️', 'success');
+                document.querySelector('.admin-nav-btn[data-tab="manage"]').click();
+            } catch (error) {
+                showNotification('Failed to delete product: ' + error.message, 'error');
+            }
+        };
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
