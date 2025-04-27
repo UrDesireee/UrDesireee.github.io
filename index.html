@@ -16,6 +16,11 @@
             Bunny's Yesstyle
             <span class="bunny-emoji">🐰</span>
         </div>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
         <div class="nav-links">
             <a href="#" class="active">Home</a>
             <a href="#collections">Collections</a>
@@ -152,6 +157,33 @@
                     import('./js/auth.js'),
                     import('./js/products.js')
                 ]);
+
+                // Initialize mobile menu
+                const menuToggle = document.querySelector('.menu-toggle');
+                const navLinks = document.querySelector('.nav-links');
+                
+                menuToggle.addEventListener('click', () => {
+                    menuToggle.classList.toggle('active');
+                    navLinks.classList.toggle('active');
+                });
+
+                // Close mobile menu when clicking a link
+                document.querySelectorAll('.nav-links a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        menuToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    });
+                });
+
+                // Close mobile menu when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!menuToggle.contains(e.target) && 
+                        !navLinks.contains(e.target) && 
+                        navLinks.classList.contains('active')) {
+                        menuToggle.classList.remove('active');
+                        navLinks.classList.remove('active');
+                    }
+                });
             } catch (error) {
                 console.error('Error initializing application:', error);
             }
