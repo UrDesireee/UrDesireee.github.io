@@ -80,21 +80,8 @@
                         <div class="search-bar">
                             <input type="text" id="searchProducts" placeholder="Search products...">
                         </div>
-                        <div class="category-filter">
-                            <select id="categoryFilterAdmin" class="category-select">
-                                <option value="">All Categories</option>
-                                <!-- Categories will be loaded dynamically -->
-                            </select>
-                        </div>
                         <div id="productsList" class="products-list">
                             <!-- Products will be loaded here -->
-                        </div>
-                    </div>
-                    
-                    <div class="category-management">
-                        <h3>Manage Categories</h3>
-                        <div id="categoryList" class="category-list">
-                            <!-- Categories will be loaded here -->
                         </div>
                     </div>
                 </div>
@@ -261,8 +248,8 @@
                              onerror="this.src='./assets/placeholder.svg'">
                         <div class="product-item-info">
                             <h3>${product.name}</h3>
-                            <p class="product-category">${product.categories?.name || 'No Category'}</p>
                             <p class="product-price">$${product.price.toFixed(2)}</p>
+                            <a href="${product.product_link}" target="_blank" class="product-link">View on YesStyle</a>
                         </div>
                         <div class="product-item-actions">
                             <button class="action-btn edit-btn" onclick="editProduct('${product.id}')">✏️</button>
@@ -274,11 +261,10 @@
 
             async searchProducts() {
                 const query = document.getElementById('searchProducts').value.toLowerCase();
-                const selectedCategory = document.getElementById('categoryFilterAdmin').value;
                 
                 const { data: products, error } = await supabase
                     .from('products')
-                    .select('*, categories(name)')
+                    .select('*')
                     .order('created_at', { ascending: false });
 
                 if (error) {
@@ -286,21 +272,9 @@
                     return;
                 }
 
-                let filteredProducts = products;
-                
-                // Filter by search term
-                if (query) {
-                    filteredProducts = filteredProducts.filter(product =>
-                        product.name.toLowerCase().includes(query)
-                    );
-                }
-
-                // Filter by category
-                if (selectedCategory) {
-                    filteredProducts = filteredProducts.filter(product =>
-                        product.category === selectedCategory
-                    );
-                }
+                const filteredProducts = products.filter(product =>
+                    product.name.toLowerCase().includes(query)
+                );
 
                 this.renderProductsList(filteredProducts);
             }
