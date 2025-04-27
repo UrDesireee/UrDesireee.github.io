@@ -1,5 +1,4 @@
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { getConfig } from './config.js'
+import { supabase, initializeSupabase } from './config.js'
 
 class ProductManager {
     constructor() {
@@ -13,16 +12,25 @@ class ProductManager {
 
     async init() {
         try {
-            const config = await getConfig();
-            this.supabase = createClient(config.supabaseUrl, config.supabaseKey);
+            // Ensure Supabase is initialized
+            await initializeSupabase();
+            this.supabase = supabase;
+            
+            // Only proceed if we have a valid Supabase client
+            if (!this.supabase) {
+                throw new Error('Failed to initialize Supabase client');
+            }
+
             this.setupEventListeners();
+            
+            // Load data
             await Promise.all([
                 this.loadProducts(),
                 this.loadCategories()
             ]);
         } catch (error) {
             console.error('Initialization error:', error);
-            this.showNotification('Failed to initialize the website 😢', 'error');
+            this.showErrorState();
         }
     }
 

@@ -94,13 +94,11 @@
 
     <script type="module">
         import ProductManager from './js/products.js';
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
-        import { getConfig } from './js/config.js';
+        import { initializeSupabase, supabase } from './js/config.js';
 
         async function loadAndInitialize() {
             try {
-                const config = await getConfig();
-                const supabase = createClient(config.supabaseUrl, config.supabaseKey);
+                await initializeSupabase();
 
                 // Initialize product display
                 new ProductManager();
@@ -119,6 +117,7 @@
                         buttonText.style.display = 'none';
                         loadingSpinner.style.display = 'inline-block';
 
+                        // Use the imported supabase instance
                         const { data, error } = await supabase
                             .from('newsletter_subscribers')
                             .insert([{ 

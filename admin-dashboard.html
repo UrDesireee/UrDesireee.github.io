@@ -236,7 +236,7 @@
                     productsList.innerHTML = '<div class="loading"></div>';
                     const { data: products, error } = await supabase
                         .from('products')
-                        .select('*')
+                        .select('*, categories(name)')
                         .order('created_at', { ascending: false });
 
                     if (error) throw error;
@@ -261,7 +261,8 @@
                              onerror="this.src='./assets/placeholder.svg'">
                         <div class="product-item-info">
                             <h3>${product.name}</h3>
-                            <p>$${product.price.toFixed(2)}</p>
+                            <p class="product-category">${product.categories?.name || 'No Category'}</p>
+                            <p class="product-price">$${product.price.toFixed(2)}</p>
                         </div>
                         <div class="product-item-actions">
                             <button class="action-btn edit-btn" onclick="editProduct('${product.id}')">✏️</button>
@@ -273,9 +274,11 @@
 
             async searchProducts() {
                 const query = document.getElementById('searchProducts').value.toLowerCase();
+                const selectedCategory = document.getElementById('categoryFilterAdmin').value;
+                
                 const { data: products, error } = await supabase
                     .from('products')
-                    .select('*')
+                    .select('*, categories(name)')
                     .order('created_at', { ascending: false });
 
                 if (error) {
@@ -283,9 +286,21 @@
                     return;
                 }
 
-                const filteredProducts = products.filter(product => 
-                    product.name.toLowerCase().includes(query)
-                );
+                let filteredProducts = products;
+                
+                // Filter by search term
+                if (query) {
+                    filteredProducts = filteredProducts.filter(product =>
+                        product.name.toLowerCase().includes(query)
+                    );
+                }
+
+                // Filter by category
+                if (selectedCategory) {
+                    filteredProducts = filteredProducts.filter(product =>
+                        product.category === selectedCategory
+                    );
+                }
 
                 this.renderProductsList(filteredProducts);
             }
