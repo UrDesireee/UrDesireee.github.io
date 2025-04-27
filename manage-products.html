@@ -201,8 +201,8 @@
 
                 if (error) throw error;
 
-                // Redirect to admin dashboard with edit parameters
-                window.location.href = `admin-dashboard.html?edit=${id}`;
+                // Redirect to admin dashboard with product data
+                window.location.href = `admin-dashboard.html#edit=${id}`;
             } catch (error) {
                 showNotification('Failed to load product: ' + error.message, 'error');
             }

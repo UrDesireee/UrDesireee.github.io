@@ -93,6 +93,14 @@
                 await this.checkAuth();
                 this.setupEventListeners();
                 await this.loadProducts();
+                
+                // Check for edit parameter in URL
+                const hash = window.location.hash;
+                if (hash.startsWith('#edit=')) {
+                    const id = hash.replace('#edit=', '');
+                    await editProduct(id);
+                    window.location.hash = ''; // Clear the hash
+                }
             }
 
             async initializeSupabase() {
@@ -293,6 +301,8 @@
         // Make these functions available globally for the onclick handlers
         window.editProduct = async (id) => {
             try {
+                document.querySelector('[data-tab="add"]').click();
+                
                 const { data: product, error } = await supabase
                     .from('products')
                     .select('*')
@@ -301,6 +311,7 @@
 
                 if (error) throw error;
 
+                // Populate form fields
                 document.getElementById('productName').value = product.name;
                 document.getElementById('productPrice').value = product.price;
                 document.getElementById('productImage').value = product.image_url;
@@ -310,7 +321,6 @@
                 submitButton.innerHTML = '<span class="button-icon">✏️</span> Update Product';
                 submitButton._editId = id;
 
-                document.querySelector('[data-tab="add"]').click();
             } catch (error) {
                 showNotification('Failed to load product: ' + error.message, 'error');
             }
