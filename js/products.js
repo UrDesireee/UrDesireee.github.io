@@ -4,7 +4,6 @@ class ProductManager {
     constructor() {
         this.productsGrid = document.getElementById('products');
         this.searchInput = document.getElementById('searchInput');
-        this.categoryFilter = document.getElementById('categoryFilter');
         this.init();
     }
 
@@ -18,7 +17,6 @@ class ProductManager {
             }
 
             this.setupEventListeners();
-            await this.loadCategories();
             await this.loadProducts();
         } catch (error) {
             console.error('Initialization error:', error);
@@ -32,33 +30,6 @@ class ProductManager {
                 this.filterProducts();
             });
         }
-        if (this.categoryFilter) {
-            this.categoryFilter.addEventListener('change', () => {
-                this.filterProducts();
-            });
-        }
-    }
-
-    async loadCategories() {
-        try {
-            const { data: categories, error } = await this.supabase
-                .from('categories')
-                .select('*')
-                .order('name');
-
-            if (error) throw error;
-
-            if (this.categoryFilter && categories) {
-                categories.forEach(category => {
-                    const option = document.createElement('option');
-                    option.value = category.id;
-                    option.textContent = category.name;
-                    this.categoryFilter.appendChild(option);
-                });
-            }
-        } catch (error) {
-            console.error('Error loading categories:', error);
-        }
     }
 
     async loadProducts() {
@@ -68,7 +39,7 @@ class ProductManager {
             this.showLoading();
             const { data: products, error } = await this.supabase
                 .from('products')
-                .select('*, categories(name)')
+                .select('*')
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
@@ -92,19 +63,12 @@ class ProductManager {
         if (!this.allProducts) return;
 
         const searchTerm = this.searchInput?.value.toLowerCase() || '';
-        const selectedCategory = this.categoryFilter?.value || '';
 
         let filtered = this.allProducts;
 
         if (searchTerm) {
             filtered = filtered.filter(product => 
                 product.name.toLowerCase().includes(searchTerm)
-            );
-        }
-
-        if (selectedCategory) {
-            filtered = filtered.filter(product => 
-                product.category === selectedCategory
             );
         }
 
@@ -133,7 +97,6 @@ class ProductManager {
                      onerror="this.src='./assets/placeholder.svg'">
                 <div class="product-info">
                     <h3 class="product-name">${product.name}</h3>
-                    ${product.categories ? `<span class="product-category">${product.categories.name}</span>` : ''}
                     <p class="product-price">$${product.price.toFixed(2)}</p>
                     <a href="${product.product_link}" target="_blank" class="browse-btn">View on Yesstyle</a>
                 </div>
