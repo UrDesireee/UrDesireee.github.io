@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Bunny's Yesstyle Collection</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/animations.css">
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <a href="index.html">
+                <span class="bunny-emoji">🐰</span>
+                Bunny's Yesstyle
+                <span class="bunny-emoji">🐰</span>
+            </a>
+        </div>
+        <div class="menu-toggle">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="index.html#collections">Collections</a>
+            <a href="index.html#about">About</a>
+            <a href="contact.html" class="active">Contact</a>
+            <a href="admin-login.html" class="admin-login">Admin Login</a>
+        </div>
+    </nav>
+
+    <section class="contact-page">
+        <div class="contact-container">
+            <h1>Contact Us</h1>
+            <p>Have any questions? We'd love to hear from you!</p>
+            <div class="contact-info">
+                <div class="contact-methods">
+                    <div class="contact-method">
+                        <span class="icon">✉️</span>
+                        <h3>Email Us</h3>
+                        <p>We'll respond within 24 hours</p>
+                    </div>
+                    <div class="contact-method">
+                        <span class="icon">💬</span>
+                        <h3>Live Chat</h3>
+                        <p>Available Mon-Fri, 9am-5pm</p>
+                    </div>
+                    <div class="contact-method">
+                        <span class="icon">📱</span>
+                        <h3>Social Media</h3>
+                        <p>Follow us for updates</p>
+                    </div>
+                </div>
+                <form id="contactForm" class="contact-form">
+                    <input type="text" placeholder="Your Name" required>
+                    <input type="email" placeholder="Your Email" required>
+                    <textarea placeholder="Your Message" required></textarea>
+                    <button type="submit">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Bunny's Yesstyle Collection. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Initialize mobile menu
+        const menuToggle = document.querySelector('.menu-toggle');
+        const navLinks = document.querySelector('.nav-links');
+        
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+        });
+
+        // Handle contact form submission
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const submitBtn = e.target.querySelector('button');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Sending...';
+
+            try {
+                // Add your form submission logic here
+                await new Promise(resolve => setTimeout(resolve, 1000)); // Simulated delay
+                showNotification('Message sent successfully! 📧', 'success');
+                e.target.reset();
+            } catch (error) {
+                showNotification('Failed to send message: ' + error.message, 'error');
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Send Message';
+            }
+        });
+
+        function showNotification(message, type) {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>

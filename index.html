@@ -25,7 +25,7 @@
             <a href="#" class="active">Home</a>
             <a href="#collections">Collections</a>
             <a href="#about">About</a>
-            <a href="#contact">Contact</a>
+            <a href="contact.html">Contact</a>
             <a href="admin-login.html" class="admin-login">Admin Login</a>
         </div>
     </nav>
@@ -55,9 +55,25 @@
     </section>
 
     <section id="about" class="about">
-        <h2>About Our Collection</h2>
-        <p>Welcome to our carefully curated collection of the cutest fashion items from Yesstyle! 
-           We handpick each item to ensure you get the most adorable and trendy pieces.</p>
+        <div class="about-container">
+            <h2>About Our Collection</h2>
+            <div class="about-content">
+                <p>Welcome to our carefully curated collection of the cutest fashion items from Yesstyle! 
+                We handpick each item to ensure you get the most adorable and trendy pieces.</p>
+                
+                <p>Our mission is to bring you the latest and most kawaii fashion straight from Asia. 
+                Each item in our collection is specifically chosen for its unique style, quality, and cuteness factor!</p>
+                
+                <p>Why choose our collection?</p>
+                <ul>
+                    <li>🌸 Carefully selected items</li>
+                    <li>✨ Latest fashion trends</li>
+                    <li>🛍️ Best quality assurance</li>
+                    <li>💖 Kawaii aesthetic focus</li>
+                    <li>🎀 Regular new arrivals</li>
+                </ul>
+            </div>
+        </div>
     </section>
 
     <section class="newsletter">
@@ -66,17 +82,6 @@
         <form id="newsletterForm" class="newsletter-form">
             <input type="email" placeholder="Your email address" required>
             <button type="submit" class="subscribe-btn">Subscribe</button>
-        </form>
-    </section>
-
-    <section id="contact" class="contact">
-        <h2>Contact Us</h2>
-        <p>Have any questions? We'd love to hear from you!</p>
-        <form id="contactForm" class="contact-form">
-            <input type="text" placeholder="Your Name" required>
-            <input type="email" placeholder="Your Email" required>
-            <textarea placeholder="Your Message" required></textarea>
-            <button type="submit">Send Message</button>
         </form>
     </section>
 
@@ -100,6 +105,23 @@
                 menuToggle.addEventListener('click', () => {
                     menuToggle.classList.toggle('active');
                     navLinks.classList.toggle('active');
+                });
+
+                // Add smooth scrolling for all navigation links
+                document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+                    anchor.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        const target = document.querySelector(this.getAttribute('href'));
+                        if (target) {
+                            target.scrollIntoView({
+                                behavior: 'smooth',
+                                block: 'start'
+                            });
+                            // Close mobile menu if open
+                            menuToggle.classList.remove('active');
+                            navLinks.classList.remove('active');
+                        }
+                    });
                 });
 
                 // Close mobile menu when clicking a link

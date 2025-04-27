@@ -9,6 +9,7 @@ class ProductManager {
         this.supabase = null;
         this.searchInput = document.getElementById('searchProducts');
         this.categoryFilter = document.getElementById('categoryFilter');
+        this.newsletterForm = document.getElementById('newsletterForm');
         this.init();
     }
 
@@ -51,6 +52,10 @@ class ProductManager {
         // Make edit and delete functions available globally
         window.editProduct = (id) => this.editProduct(id);
         window.deleteProduct = (id) => this.deleteProduct(id);
+
+        if (this.newsletterForm) {
+            this.newsletterForm.addEventListener('submit', (e) => this.handleNewsletterSubmit(e));
+        }
     }
 
     async loadCategories() {
@@ -154,6 +159,27 @@ class ProductManager {
 
             if (error) throw error;
 
+            // Send email to all subscribers
+            const { data: subscribers } = await this.supabase
+                .from('newsletter_subscribers')
+                .select('email');
+
+            if (subscribers?.length) {
+                const emailPromises = subscribers.map(subscriber => 
+                    this.supabase.functions.invoke('send-product-notification', {
+                        body: {
+                            email: subscriber.email,
+                            productName: productData.name,
+                            productPrice: productData.price,
+                            productImage: productData.image_url,
+                            productLink: productData.product_link
+                        }
+                    })
+                );
+                
+                await Promise.all(emailPromises);
+            }
+
             this.showNotification(
                 this.currentEditId ? 'Product updated successfully! 🎉' : 'Product added successfully! ✨', 
                 'success'
@@ -167,6 +193,36 @@ class ProductManager {
             this.showNotification(error.message, 'error');
         } finally {
             submitButton.disabled = false;
+        }
+    }
+
+    async handleNewsletterSubmit(e) {
+        e.preventDefault();
+        const emailInput = e.target.querySelector('input[type="email"]');
+        const email = emailInput.value;
+        const submitBtn = e.target.querySelector('button');
+
+        try {
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Subscribing...';
+
+            const { error } = await this.supabase
+                .from('newsletter_subscribers')
+                .insert([{ email, subscribed_at: new Date().toISOString() }]);
+
+            if (error) throw error;
+
+            this.showNotification('Successfully subscribed to newsletter! 🎉', 'success');
+            emailInput.value = '';
+        } catch (error) {
+            if (error.code === '23505') { // Unique constraint error
+                this.showNotification('You are already subscribed! 💖', 'info');
+            } else {
+                this.showNotification('Failed to subscribe: ' + error.message, 'error');
+            }
+        } finally {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Subscribe';
         }
     }
 
