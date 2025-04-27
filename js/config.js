@@ -1,3 +1,5 @@
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+
 // Supabase configuration
 const supabaseConfig = {
     url: 'https://vuexvuxmbsspltewgleq.supabase.co',
@@ -8,7 +10,7 @@ const supabaseConfig = {
 let supabase = null;
 
 function initializeSupabase() {
-    supabase = supabaseClient.createClient(supabaseConfig.url, supabaseConfig.key);
+    supabase = createClient(supabaseConfig.url, supabaseConfig.key);
 }
 
 // Check if user is already logged in

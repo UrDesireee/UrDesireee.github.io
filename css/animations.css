@@ -1,3 +1,4 @@
+/* Smooth fade in animation */
 @keyframes fadeIn {
     from {
         opacity: 0;
@@ -9,81 +10,133 @@
     }
 }
 
+/* Smooth slide in animation */
 @keyframes slideIn {
     from {
         transform: translateX(-100%);
+        opacity: 0;
     }
     to {
         transform: translateX(0);
+        opacity: 1;
     }
 }
 
+/* Playful bounce animation */
 @keyframes bounce {
-    0%, 100% {
+    0%, 20%, 50%, 80%, 100% {
         transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-15px);
+    }
+    60% {
+        transform: translateY(-7px);
+    }
+}
+
+/* Subtle wiggle animation */
+@keyframes wiggle {
+    0%, 100% {
+        transform: rotate(0deg) scale(1);
+    }
+    25% {
+        transform: rotate(8deg) scale(1.1);
+    }
+    75% {
+        transform: rotate(-8deg) scale(1.1);
+    }
+}
+
+/* Gradient shift animation */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Scale up animation */
+@keyframes scaleUp {
+    from {
+        transform: scale(0.95);
+        opacity: 0;
+    }
+    to {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+/* Floating animation */
+@keyframes float {
+    0% {
+        transform: translateY(0px);
     }
     50% {
         transform: translateY(-10px);
     }
-}
-
-@keyframes wiggle {
-    0%, 100% {
-        transform: rotate(0deg);
-    }
-    25% {
-        transform: rotate(5deg);
-    }
-    75% {
-        transform: rotate(-5deg);
+    100% {
+        transform: translateY(0px);
     }
 }
 
+/* Apply animations to elements */
 .fade-in {
-    animation: fadeIn 0.6s ease-out;
+    animation: fadeIn 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
 .slide-in {
-    animation: slideIn 0.5s ease-out;
+    animation: slideIn 0.5s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
+/* Enhanced bunny emoji animation */
 .bunny-emoji {
     display: inline-block;
-    animation: bounce 2s infinite;
+    animation: float 3s ease-in-out infinite;
 }
 
 .nav-brand:hover .bunny-emoji {
-    animation: wiggle 1s infinite;
+    animation: wiggle 1s cubic-bezier(0.455, 0.03, 0.515, 0.955) infinite;
 }
 
-.hero h1,
-.hero p,
-.hero .browse-btn {
-    animation: fadeIn 1s ease-out forwards;
+/* Hero section animations */
+.hero h1 {
+    opacity: 0;
+    animation: fadeIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
 .hero p {
-    animation-delay: 0.3s;
+    opacity: 0;
+    animation: fadeIn 1s cubic-bezier(0.165, 0.84, 0.44, 1) 0.3s forwards;
 }
 
 .hero .browse-btn {
-    animation-delay: 0.6s;
+    opacity: 0;
+    animation: scaleUp 1s cubic-bezier(0.165, 0.84, 0.44, 1) 0.6s forwards;
 }
 
+/* Product card animations */
 .product-card {
     opacity: 0;
-    animation: fadeIn 0.5s ease-out forwards;
+    animation: fadeIn 0.6s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
 }
 
-.product-card:nth-child(1) { animation-delay: 0.1s; }
-.product-card:nth-child(2) { animation-delay: 0.2s; }
-.product-card:nth-child(3) { animation-delay: 0.3s; }
-.product-card:nth-child(4) { animation-delay: 0.4s; }
-.product-card:nth-child(5) { animation-delay: 0.5s; }
-.product-card:nth-child(6) { animation-delay: 0.6s; }
+.products-grid .product-card:nth-child(1) { animation-delay: 0.1s; }
+.products-grid .product-card:nth-child(2) { animation-delay: 0.2s; }
+.products-grid .product-card:nth-child(3) { animation-delay: 0.3s; }
+.products-grid .product-card:nth-child(4) { animation-delay: 0.4s; }
+.products-grid .product-card:nth-child(5) { animation-delay: 0.5s; }
+.products-grid .product-card:nth-child(6) { animation-delay: 0.6s; }
 
+/* Modal animations */
 .modal-content {
-    animation: fadeIn 0.3s ease-out;
+    animation: scaleUp 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 /* Loading animation */
@@ -93,30 +146,58 @@
     border: 3px solid var(--secondary-color);
     border-radius: 50%;
     border-top-color: var(--primary-color);
-    animation: spin 1s infinite linear;
+    animation: spin 1s linear infinite;
     margin: 2rem auto;
 }
 
 @keyframes spin {
-    100% {
+    to {
         transform: rotate(360deg);
     }
 }
 
-/* Smooth transitions for interactive elements */
+/* Button hover transitions */
 .nav-links a,
 .browse-btn,
 .product-card,
 .contact-form button,
-.subscribe-btn {
-    transition: all 0.3s ease;
+.subscribe-btn,
+.action-btn {
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-/* Hover effects */
-.nav-links a:hover,
-.browse-btn:hover,
-.contact-form button:hover,
-.subscribe-btn:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+/* Gradient background animation for special elements */
+.gradient-animated {
+    background: linear-gradient(270deg, var(--primary-pink), var(--accent-purple), var(--dark-purple));
+    background-size: 200% 200%;
+    animation: gradientShift 6s ease infinite;
+}
+
+/* Notification animations */
+.notification {
+    animation: 
+        slideIn 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55) forwards,
+        fadeOut 0.3s ease-out 2.7s forwards;
+}
+
+/* Image hover effect */
+.product-image {
+    transition: transform 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Admin panel transition effects */
+.admin-nav-btn,
+.admin-tab {
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+/* Mobile menu animations */
+@media (max-width: 768px) {
+    .nav-links {
+        transition: right 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
+    
+    .menu-toggle span {
+        transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+    }
 }
