@@ -244,6 +244,7 @@
 
                 productsList.innerHTML = products.map(product => `
                     <div class="product-item" data-id="${product.id}">
+                        <a href="${product.product_link}" target="_blank" class="product-item-link"></a>
                         <img src="${product.image_url}" alt="${product.name}" 
                              onerror="this.src='./assets/placeholder.svg'">
                         <div class="product-item-info">

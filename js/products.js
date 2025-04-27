@@ -55,6 +55,7 @@ class ProductManager {
             const productCard = document.createElement('div');
             productCard.className = 'product-card';
             productCard.innerHTML = `
+                <a href="${product.product_link}" target="_blank" class="product-card-link"></a>
                 <img src="${product.image_url}" alt="${product.name}" class="product-image" 
                      onerror="this.src='./assets/placeholder.svg'">
                 <div class="product-info">
