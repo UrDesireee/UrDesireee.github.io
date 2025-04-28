@@ -196,6 +196,30 @@
         }
 
         loadAndInitialize();
+
+        function renderProduct(product) {
+            return `
+                <div class="product-card">
+                    <img src="${product.image_url}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p class="price">$${product.price.toFixed(2)}</p>
+                    <a href="${product.product_link}" 
+                       target="_blank" 
+                       class="view-product-btn"
+                       onclick="incrementProductClick(${product.id}); return true;">
+                        View on YesStyle
+                    </a>
+                </div>
+            `;
+        }
+
+        async function incrementProductClick(productId) {
+            try {
+                await supabase.rpc('increment_click_count', { product_id: productId });
+            } catch (error) {
+                console.error('Failed to increment click count:', error);
+            }
+        }
     </script>
 </body>
 </html>
