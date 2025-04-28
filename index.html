@@ -197,6 +197,7 @@
 
         loadAndInitialize();
 
+        // Update the existing renderProduct function
         function renderProduct(product) {
             return `
                 <div class="product-card">
@@ -206,6 +207,7 @@
                     <a href="${product.product_link}" 
                        target="_blank" 
                        class="view-product-btn"
+                       data-product-id="${product.id}"
                        onclick="incrementProductClick(${product.id}); return true;">
                         View on YesStyle
                     </a>
@@ -215,7 +217,24 @@
 
         async function incrementProductClick(productId) {
             try {
+                // First increment the click count in Supabase
                 await supabase.rpc('increment_click_count', { product_id: productId });
+                
+                // Then call the Edge Function
+                const response = await fetch('https://vuexvuxmbsspltewgleq.supabase.co/functions/v1/increment-click-count', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${supabase.auth.session()?.access_token}`
+                    },
+                    body: JSON.stringify({ product_id: productId }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to call edge function');
+                }
+
+                console.log('Click count incremented successfully.');
             } catch (error) {
                 console.error('Failed to increment click count:', error);
             }
